@@ -12,6 +12,7 @@ class GetFavoriteMoviesUseCase
 
   @override
   Future<Either<Failure, List<MovieModelDB>>> call(NoParameters parameters) async {
+    print("GetFavoriteMoviesUseCase-----------------1");
     return await baseMoviesRepository.getAllFavoriteMovies();
   }
 }

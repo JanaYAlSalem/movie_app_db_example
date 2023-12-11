@@ -6,11 +6,11 @@ import 'package:movie_app_db_example/movies/data/models/movies_model_db.dart';
 import 'package:path_provider/path_provider.dart';
 
 abstract class BaseMovieLocalDataSource {
-  Future<void> addFavoriteMovies(MovieModelDB newMovie);
+  Future<void> addFavoriteMovies(MovieModel favoriteMovie);
 
   Future<void> deleteFavoriteMovies(int id);
 
-  Future<List<MovieModelDB>> getAllFavoritesMovies();
+  Future<List<MovieModelDB>> getAllFavoriteMovies();
 }
 
 class MovieLocalDataSource extends BaseMovieLocalDataSource {
@@ -27,24 +27,29 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
   }
 
   @override
-  Future<void> addFavoriteMovies(MovieModelDB newMovie) async {
+  Future<void> addFavoriteMovies(MovieModel favoriteMovie) async {
+    MovieModelDB newMovie = MovieModelDB()
+      ..idMovieModel = favoriteMovie.id
+      ..title = favoriteMovie.title
+      ..overview = favoriteMovie.overview
+      ..backdropPath = favoriteMovie.backdropPath;
     if (!isar.isOpen) await openDB();
     await isar.writeTxnSync(() => isar.movieModelDBs.putSync(newMovie));
   }
 
   @override
-  Future<void> deleteFavoriteMovies(int id) {
-    // TODO: implement deleteFavoriteMovies
+  Future<void> deleteFavoriteMovies(int id) async {
+    // final existingUser = await isar.movieModelDBs.get(id); // get
+    await isar.movieModelDBs.delete(id);
     throw UnimplementedError();
   }
 
   @override
-  Future<List<MovieModelDB>> getAllFavoritesMovies() async {
-    print("------------ ${isar.isOpen}");
-
-    if (!isar.isOpen)
-      await openDB();
-    final favoritMovies = isar.movieModelDBs;
+  Future<List<MovieModelDB>> getAllFavoriteMovies() async {
+    // print("------------ ${isar.isOpen}");
+    // if (!isar.isOpen)
+    await openDB();
+    // final favoritMovies = isar.movieModelDBs;
     throw UnimplementedError();
   }
 }

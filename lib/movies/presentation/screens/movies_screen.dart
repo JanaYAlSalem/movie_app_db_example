@@ -6,9 +6,9 @@ import 'package:movie_app_db_example/movies/presentation/components/favorite_mov
 import 'package:movie_app_db_example/movies/presentation/components/now_playing_component.dart';
 import 'package:movie_app_db_example/movies/presentation/components/popular_component.dart';
 import 'package:movie_app_db_example/movies/presentation/components/top_rated_component.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies_bloc.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies_event.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies_state.dart';
+import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_event.dart';
+import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_state.dart';
 
 class MoviesScreen extends StatelessWidget {
   const MoviesScreen({Key? key}) : super(key: key);

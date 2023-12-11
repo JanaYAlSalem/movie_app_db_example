@@ -8,4 +8,5 @@ class MovieModelDB {
   late int idMovieModel;
   late String title;
   late String overview;
+  late String backdropPath;
 }

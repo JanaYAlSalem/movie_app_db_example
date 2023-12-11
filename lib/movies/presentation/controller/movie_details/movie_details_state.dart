@@ -8,6 +8,7 @@ class MovieDetailsState extends Equatable {
     this.recommendation = const [],
     this.recommendationState = RequestState.loading,
     this.recommendationMessage = '',
+    this.test = true
   });
 
   final MovieDetail? movieDetail;
@@ -16,6 +17,9 @@ class MovieDetailsState extends Equatable {
   final List<Recommendation> recommendation;
   final RequestState recommendationState;
   final String recommendationMessage;
+
+  //todo : for test
+  final bool test;
 
   MovieDetailsState copyWith({
     MovieDetail? movieDetail,
@@ -44,5 +48,6 @@ class MovieDetailsState extends Equatable {
     recommendation,
     recommendationState,
     recommendationMessage,
+    test,
   ];
 }

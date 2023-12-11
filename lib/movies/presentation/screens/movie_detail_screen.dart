@@ -6,15 +6,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app_db_example/core/network/api_constance.dart';
 import 'package:movie_app_db_example/core/services/services_locator.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
+import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/domain/entities/genres.dart';
+import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/domain/entities/recommendation.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movie_details_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/controller/movie_details/movie_details_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final int id;
+  final Movie newMovie;
 
-  const MovieDetailScreen({Key? key, required this.id}) : super(key: key);
+  const MovieDetailScreen({Key? key, required this.id,
+    required this.newMovie
+  })
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +28,8 @@ class MovieDetailScreen extends StatelessWidget {
       create: (context) => servicesLocator<MovieDetailsBloc>()
         ..add(GetMovieDetailsEvent(id))
         ..add(GetMovieRecommendationEvent(id)),
+        // ..add(AddFavoriteMoviesEvent(newMovie))
+        // ..add(DeleteFavoriteMoviesEvent(id)),
       lazy: false,
       child: const Scaffold(
         body: MovieDetailContent(),
@@ -31,6 +39,7 @@ class MovieDetailScreen extends StatelessWidget {
 }
 
 class MovieDetailContent extends StatelessWidget {
+
   const MovieDetailContent({
     Key? key,
   }) : super(key: key);
@@ -100,20 +109,37 @@ class MovieDetailContent extends StatelessWidget {
                                     letterSpacing: 1.2,
                                   )),
                               Spacer(),
-                              IconButton(
-                                onPressed: () async {
-                                  print(state.movieDetail!.title);
-                                  // await movieLocalDataSource.openDB();
-                                  // final newMove = MovieModelDB()
-                                  //   ..idMovieModel = state.movieDetail!.id
-                                  //   ..title = state.movieDetail!.title
-                                  //   ..overview = state.movieDetail!.overview;
-                                  // await movieLocalDataSource
-                                  //     .addFavoriteMovies(newMove);
-                                },
-                                color: Colors.red,
-                                icon: Icon(Icons.favorite),
-                              )
+                              state.test
+                                  ? IconButton(
+                                      onPressed: () async {
+                                        print(state.movieDetail!.title);
+                                        print(state.movieDetail!.backdropPath);
+                                        print(state.movieDetail!.overview);
+
+                                      },
+                                      color: Colors.red,
+                                      icon: Icon(Icons.favorite),
+                                    )
+                                  : IconButton(
+                                      onPressed: () async {
+                                        print(state.movieDetail!.title);
+                                        print(state.movieDetail!.backdropPath);
+                                        print(state.movieDetail!.overview);
+                                        servicesLocator<MovieDetailsBloc>().add(AddFavoriteMoviesEvent(
+                                          MovieModel(
+                                            id: state.movieDetail!.id,
+                                            title: state.movieDetail!.title,
+                                            backdropPath: state.movieDetail!.backdropPath,
+                                            overview: state.movieDetail!.overview,
+                                            releaseDate: state.movieDetail!.releaseDate,
+                                            voteAverage: state.movieDetail!.voteAverage,
+                                              genreIds: []
+                                          )
+                                        ));
+                                      },
+                                      color: Colors.grey,
+                                      icon: Icon(Icons.favorite),
+                                    )
                             ],
                           ),
                           const SizedBox(height: 8.0),
@@ -263,44 +289,43 @@ class MovieDetailContent extends StatelessWidget {
       builder: (context, state) => SliverGrid(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            return InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => MovieDetailScreen(
-                      id: recommendation[index].id,
-                    ),
-                  ),
-                );
-              },
-              child: FadeInUp(
-                from: 20,
-                duration: const Duration(milliseconds: 500),
-                child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                    child: CachedNetworkImage(
-                      imageUrl: ApiConstance.imageUrl(
-                          recommendation[index].backdropPath!),
-                      placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey[850]!,
-                        highlightColor: Colors.grey[800]!,
-                        child: Container(
-                          height: 170.0,
-                          width: 120.0,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      height: 180.0,
-                      fit: BoxFit.cover,
-                    )),
-              ),
-            );
+            // return InkWell(
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (BuildContext context) =>
+            //             MovieDetailScreen(id: recommendation[index].id,),
+            //       ),
+            //     );
+            //   },
+            //   child: FadeInUp(
+            //     from: 20,
+            //     duration: const Duration(milliseconds: 500),
+            //     child: ClipRRect(
+            //         borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+            //         child: CachedNetworkImage(
+            //           imageUrl: ApiConstance.imageUrl(
+            //               recommendation[index].backdropPath!),
+            //           placeholder: (context, url) => Shimmer.fromColors(
+            //             baseColor: Colors.grey[850]!,
+            //             highlightColor: Colors.grey[800]!,
+            //             child: Container(
+            //               height: 170.0,
+            //               width: 120.0,
+            //               decoration: BoxDecoration(
+            //                 color: Colors.black,
+            //                 borderRadius: BorderRadius.circular(8.0),
+            //               ),
+            //             ),
+            //           ),
+            //           errorWidget: (context, url, error) =>
+            //               const Icon(Icons.error),
+            //           height: 180.0,
+            //           fit: BoxFit.cover,
+            //         )),
+            //   ),
+            // );
           },
         ),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
