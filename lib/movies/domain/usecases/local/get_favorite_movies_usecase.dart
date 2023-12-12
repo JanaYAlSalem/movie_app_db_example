@@ -5,13 +5,13 @@ import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/data/models/movies_model_db.dart';
 import 'package:movie_app_db_example/movies/domain/repository/base_movies_repository.dart';
 
-class GetFavoriteMoviesUseCase extends BaseUseCase<void, NoParameters> {
+class GetFavoriteMoviesUseCase extends BaseUseCase<List<MovieModelDB>, NoParameters> {
   final BaseMoviesRepository baseMoviesRepository;
 
   GetFavoriteMoviesUseCase(this.baseMoviesRepository);
 
   @override
-  Future<Either<Failure, void>> call(NoParameters parameters) async {
+  Future<Either<Failure, List<MovieModelDB>>> call(NoParameters parameters) async {
     return await baseMoviesRepository.getAllFavoriteMovies();
   }
 

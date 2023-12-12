@@ -26,7 +26,7 @@ abstract class BaseMoviesRepository {
 
   Future<Either<Failure, void>> deleteFavoriteMovies(int id);
 
-  Future<Either<Failure, IsarCollection<MovieModelDB>>> getAllFavoriteMovies();
+  Future<Either<Failure, List<MovieModelDB>>> getAllFavoriteMovies();
 
   Future<Either<Failure, bool>> isFavoriteMovie(int id);
 }

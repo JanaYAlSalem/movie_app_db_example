@@ -96,7 +96,7 @@ class MoviesRepository extends BaseMoviesRepository {
   }
 
   @override
-  Future<Either<Failure, IsarCollection<MovieModelDB>>> getAllFavoriteMovies() async {
+  Future<Either<Failure, List<MovieModelDB>>> getAllFavoriteMovies() async {
     final result = await baseMovieLocalDataSource.getAllFavoriteMovies();
     try {
       return Right(result);

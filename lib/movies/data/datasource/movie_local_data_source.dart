@@ -9,7 +9,7 @@ abstract class BaseMovieLocalDataSource {
 
   Future<void> deleteFavoriteMovies(int id);
 
-  Future<IsarCollection<MovieModelDB>> getAllFavoriteMovies();
+  Future<List<MovieModelDB>> getAllFavoriteMovies();
 
   Future<bool> isFavoriteMovie(int id);
 }
@@ -45,29 +45,37 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
     });
   }
 
+  // @override
+  // Future<IsarCollection<MovieModelDB>> getAllFavoriteMovies() async {
+  //
+  //   await openDB();
+  //   final favoritMovies = isar.movieModelDBs;
+  //
+  //   print(favoritMovies);
+  //   return favoritMovies;
+  // }
+
   @override
-  Future<IsarCollection<MovieModelDB>> getAllFavoriteMovies() async {
+  Future<List<MovieModelDB>> getAllFavoriteMovies() async {
     // print("------------ ${isar.isOpen}");
     // if (!isar.isOpen)
     await openDB();
-    final favoritMovies = isar.movieModelDBs;
-
+    final favoritMovies = isar.movieModelDBs.where().findAll();
     print(favoritMovies);
     return favoritMovies;
-    throw UnimplementedError();
   }
+
+
+
 
   @override
   Future<bool> isFavoriteMovie(int id) async {
-    // TODO: implement _getMovieById
-    final s =
-    await isar.movieModelDBs.filter().idMovieModelEqualTo(id).findAll();
+    final s = await isar.movieModelDBs.filter().idMovieModelEqualTo(id).findAll();
     if (s.isNotEmpty) {
-      print("########### isNotEmpty");
+      print("########### true");
       return true;
-      //delete
     } else {
-      print("########### isEmpty");
+      print("########### false");
       return false;
       // add
     }

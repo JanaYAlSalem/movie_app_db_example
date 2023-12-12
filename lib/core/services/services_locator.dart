@@ -12,8 +12,8 @@ import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playi
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_top_rated_movies_usecase.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movie_details/movie_details_bloc.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_bloc.dart';
 
 final servicesLocator = GetIt.instance;
 
@@ -52,5 +52,6 @@ class ServicesLocator {
         () => MovieRemoteDataSource());
     servicesLocator.registerFactory<BaseMovieLocalDataSource>(
         () => MovieLocalDataSource());
+
   }
 }

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_db_example/core/network/api_constance.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_bloc.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_state.dart';
-import 'package:movie_app_db_example/movies/presentation/screens/movie_detail_screen.dart';
+import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_state.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/screens/movie_detail_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PopularComponent extends StatelessWidget {

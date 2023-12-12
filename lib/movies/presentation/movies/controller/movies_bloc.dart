@@ -6,8 +6,8 @@ import 'package:movie_app_db_example/movies/domain/usecases/local/get_favorite_m
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playing_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_top_rated_movies_usecase.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_event.dart';
-import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_state.dart';
+import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_event.dart';
+import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_state.dart';
 
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   final GetNowPlayingMoviesUseCase getNowPlayingMoviesUseCase;
@@ -89,6 +89,8 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       GetFavoriteMoviesEvent event, Emitter<MoviesState> emit) async {
     final result = await getFavoriteMoviesUseCase(const NoParameters());
 
+    print("----------------------- ${result}");
+
     result.fold(
           (l) => emit(state.copyWith(
         topRatedMessage: l.message,
@@ -96,7 +98,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       )),
           (r) => emit(
         state.copyWith(
-          //favoriteMovies: r,
+          favoriteMovies: r,
           favoriteState: RequestState.loaded,
         ),
       ),
