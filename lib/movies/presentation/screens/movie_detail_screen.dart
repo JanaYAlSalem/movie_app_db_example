@@ -16,8 +16,7 @@ import 'package:shimmer/shimmer.dart';
 class MovieDetailScreen extends StatelessWidget {
   final int id;
 
-  const MovieDetailScreen({Key? key, required this.id})
-      : super(key: key);
+  const MovieDetailScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -103,43 +102,40 @@ class MovieDetailContent extends StatelessWidget {
                                     letterSpacing: 1.2,
                                   )),
                               Spacer(),
-                              // state.test
-                              //     ?
-
+                              state.isFavorite ?
                               IconButton(
                                 onPressed: () async {
-                                  print(state.movieDetail!.title);
-                                  print(state.movieDetail!.backdropPath);
-                                  print(state.movieDetail!.overview);
                                   servicesLocator<MovieDetailsBloc>().add(
-                                      DeleteFavoriteMoviesEvent(
+                                      IsFavoriteMovieEvent(
                                           state.movieDetail!.id));
+
+                                  // servicesLocator<MovieDetailsBloc>().add(
+                                  //     DeleteFavoriteMoviesEvent(
+                                  //         state.movieDetail!.id));
                                 },
                                 color: Colors.red,
                                 icon: Icon(Icons.favorite),
                               )
-                              // : IconButton(
-                              //     onPressed: () async {
-                              //       servicesLocator<MovieDetailsBloc>().add(
-                              //           IsFavoriteMovieEvent(
-                              //               state.movieDetail!.id));
+                              : IconButton(
+                                onPressed: () async {
+                                  servicesLocator<MovieDetailsBloc>().add(IsFavoriteMovieEvent(state.movieDetail!.id));
 
-                              //       // servicesLocator<MovieDetailsBloc>().add(
-                              //       //     AddFavoriteMoviesEvent(MovieModel(
-                              //       //         id: state.movieDetail!.id,
-                              //       //         title: state.movieDetail!.title,
-                              //       //         backdropPath:
-                              //       //             state.movieDetail!.backdropPath,
-                              //       //         overview: state.movieDetail!.overview,
-                              //       //         releaseDate:
-                              //       //             state.movieDetail!.releaseDate,
-                              //       //         voteAverage:
-                              //       //             state.movieDetail!.voteAverage,
-                              //       //         genreIds: [])));
-                              //     },
-                              //     color: Colors.grey,
-                              //     icon: Icon(Icons.favorite),
-                              //   )
+                                  servicesLocator<MovieDetailsBloc>().add(
+                                      AddFavoriteMoviesEvent(MovieModel(
+                                          id: state.movieDetail!.id,
+                                          title: state.movieDetail!.title,
+                                          backdropPath:
+                                          state.movieDetail!.backdropPath,
+                                          overview: state.movieDetail!.overview,
+                                          releaseDate:
+                                          state.movieDetail!.releaseDate,
+                                          voteAverage:
+                                          state.movieDetail!.voteAverage,
+                                          genreIds: [])));
+                                },
+                                color: Colors.grey,
+                                icon: Icon(Icons.favorite),
+                              )
                             ],
                           ),
                           const SizedBox(height: 8.0),
@@ -246,10 +242,10 @@ class MovieDetailContent extends StatelessWidget {
                 ),
                 recommendation.length != 0
                     ? SliverPadding(
-                  padding:
-                  const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
-                  sliver: _showRecommendations(recommendation),
-                )
+                        padding:
+                            const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
+                        sliver: _showRecommendations(recommendation),
+                      )
                     : SizedBox(),
               ],
             );
@@ -288,14 +284,15 @@ class MovieDetailContent extends StatelessWidget {
     return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
       builder: (context, state) => SliverGrid(
         delegate: SliverChildBuilderDelegate(
-              (context, index) {
+          (context, index) {
             return InkWell(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        MovieDetailScreen(id: recommendation[index].id,),
+                    builder: (BuildContext context) => MovieDetailScreen(
+                      id: recommendation[index].id,
+                    ),
                   ),
                 );
               },

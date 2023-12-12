@@ -128,12 +128,10 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     result.fold(
           (l) => emit(state.copyWith(
         // recommendationState: RequestState.error,
-        // recommendationMessage: l.message,
       )),
           (r) => emit(
         state.copyWith(
-          // test: r,
-          //recommendationState: RequestState.loaded,
+          isFavorite: r,
         ),
       ),
     );

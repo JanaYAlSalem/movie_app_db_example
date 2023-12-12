@@ -8,7 +8,7 @@ class MovieDetailsState extends Equatable {
         this.recommendation = const [],
         this.recommendationState = RequestState.loading,
         this.recommendationMessage = '',
-        this.test = true});
+        this.isFavorite = false});
 
   final MovieDetail? movieDetail;
   final RequestState movieDetailsState;
@@ -16,9 +16,7 @@ class MovieDetailsState extends Equatable {
   final List<Recommendation> recommendation;
   final RequestState recommendationState;
   final String recommendationMessage;
-
-  //todo : for test
-  final bool test;
+  final bool isFavorite;
 
   MovieDetailsState copyWith(
       {MovieDetail? movieDetail,
@@ -27,7 +25,7 @@ class MovieDetailsState extends Equatable {
         List<Recommendation>? recommendation,
         RequestState? recommendationState,
         String? recommendationMessage,
-        bool? test}) {
+        bool? isFavorite}) {
     return MovieDetailsState(
         movieDetail: movieDetail ?? this.movieDetail,
         movieDetailsState: movieDetailsState ?? this.movieDetailsState,
@@ -36,7 +34,7 @@ class MovieDetailsState extends Equatable {
         recommendationState: recommendationState ?? this.recommendationState,
         recommendationMessage:
         recommendationMessage ?? this.recommendationMessage,
-        test: test ?? this.test);
+        isFavorite: isFavorite ?? this.isFavorite);
   }
 
   @override
@@ -47,6 +45,6 @@ class MovieDetailsState extends Equatable {
     recommendation,
     recommendationState,
     recommendationMessage,
-    test,
+    isFavorite,
   ];
 }
