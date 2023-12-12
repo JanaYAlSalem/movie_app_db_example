@@ -15,11 +15,8 @@ import 'package:shimmer/shimmer.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final int id;
-  final Movie newMovie;
 
-  const MovieDetailScreen({Key? key, required this.id,
-    required this.newMovie
-  })
+  const MovieDetailScreen({Key? key, required this.id})
       : super(key: key);
 
   @override
@@ -28,8 +25,6 @@ class MovieDetailScreen extends StatelessWidget {
       create: (context) => servicesLocator<MovieDetailsBloc>()
         ..add(GetMovieDetailsEvent(id))
         ..add(GetMovieRecommendationEvent(id)),
-        // ..add(AddFavoriteMoviesEvent(newMovie))
-        // ..add(DeleteFavoriteMoviesEvent(id)),
       lazy: false,
       child: const Scaffold(
         body: MovieDetailContent(),
@@ -39,7 +34,6 @@ class MovieDetailScreen extends StatelessWidget {
 }
 
 class MovieDetailContent extends StatelessWidget {
-
   const MovieDetailContent({
     Key? key,
   }) : super(key: key);
@@ -109,37 +103,43 @@ class MovieDetailContent extends StatelessWidget {
                                     letterSpacing: 1.2,
                                   )),
                               Spacer(),
-                              state.test
-                                  ? IconButton(
-                                      onPressed: () async {
-                                        print(state.movieDetail!.title);
-                                        print(state.movieDetail!.backdropPath);
-                                        print(state.movieDetail!.overview);
+                              // state.test
+                              //     ?
 
-                                      },
-                                      color: Colors.red,
-                                      icon: Icon(Icons.favorite),
-                                    )
-                                  : IconButton(
-                                      onPressed: () async {
-                                        print(state.movieDetail!.title);
-                                        print(state.movieDetail!.backdropPath);
-                                        print(state.movieDetail!.overview);
-                                        servicesLocator<MovieDetailsBloc>().add(AddFavoriteMoviesEvent(
-                                          MovieModel(
-                                            id: state.movieDetail!.id,
-                                            title: state.movieDetail!.title,
-                                            backdropPath: state.movieDetail!.backdropPath,
-                                            overview: state.movieDetail!.overview,
-                                            releaseDate: state.movieDetail!.releaseDate,
-                                            voteAverage: state.movieDetail!.voteAverage,
-                                              genreIds: []
-                                          )
-                                        ));
-                                      },
-                                      color: Colors.grey,
-                                      icon: Icon(Icons.favorite),
-                                    )
+                              IconButton(
+                                onPressed: () async {
+                                  print(state.movieDetail!.title);
+                                  print(state.movieDetail!.backdropPath);
+                                  print(state.movieDetail!.overview);
+                                  servicesLocator<MovieDetailsBloc>().add(
+                                      DeleteFavoriteMoviesEvent(
+                                          state.movieDetail!.id));
+                                },
+                                color: Colors.red,
+                                icon: Icon(Icons.favorite),
+                              )
+                              // : IconButton(
+                              //     onPressed: () async {
+                              //       servicesLocator<MovieDetailsBloc>().add(
+                              //           IsFavoriteMovieEvent(
+                              //               state.movieDetail!.id));
+
+                              //       // servicesLocator<MovieDetailsBloc>().add(
+                              //       //     AddFavoriteMoviesEvent(MovieModel(
+                              //       //         id: state.movieDetail!.id,
+                              //       //         title: state.movieDetail!.title,
+                              //       //         backdropPath:
+                              //       //             state.movieDetail!.backdropPath,
+                              //       //         overview: state.movieDetail!.overview,
+                              //       //         releaseDate:
+                              //       //             state.movieDetail!.releaseDate,
+                              //       //         voteAverage:
+                              //       //             state.movieDetail!.voteAverage,
+                              //       //         genreIds: [])));
+                              //     },
+                              //     color: Colors.grey,
+                              //     icon: Icon(Icons.favorite),
+                              //   )
                             ],
                           ),
                           const SizedBox(height: 8.0),
@@ -246,10 +246,10 @@ class MovieDetailContent extends StatelessWidget {
                 ),
                 recommendation.length != 0
                     ? SliverPadding(
-                        padding:
-                            const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
-                        sliver: _showRecommendations(recommendation),
-                      )
+                  padding:
+                  const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
+                  sliver: _showRecommendations(recommendation),
+                )
                     : SizedBox(),
               ],
             );
@@ -288,44 +288,44 @@ class MovieDetailContent extends StatelessWidget {
     return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
       builder: (context, state) => SliverGrid(
         delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            // return InkWell(
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (BuildContext context) =>
-            //             MovieDetailScreen(id: recommendation[index].id,),
-            //       ),
-            //     );
-            //   },
-            //   child: FadeInUp(
-            //     from: 20,
-            //     duration: const Duration(milliseconds: 500),
-            //     child: ClipRRect(
-            //         borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-            //         child: CachedNetworkImage(
-            //           imageUrl: ApiConstance.imageUrl(
-            //               recommendation[index].backdropPath!),
-            //           placeholder: (context, url) => Shimmer.fromColors(
-            //             baseColor: Colors.grey[850]!,
-            //             highlightColor: Colors.grey[800]!,
-            //             child: Container(
-            //               height: 170.0,
-            //               width: 120.0,
-            //               decoration: BoxDecoration(
-            //                 color: Colors.black,
-            //                 borderRadius: BorderRadius.circular(8.0),
-            //               ),
-            //             ),
-            //           ),
-            //           errorWidget: (context, url, error) =>
-            //               const Icon(Icons.error),
-            //           height: 180.0,
-            //           fit: BoxFit.cover,
-            //         )),
-            //   ),
-            // );
+              (context, index) {
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        MovieDetailScreen(id: recommendation[index].id,),
+                  ),
+                );
+              },
+              child: FadeInUp(
+                from: 20,
+                duration: const Duration(milliseconds: 500),
+                child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    child: CachedNetworkImage(
+                      imageUrl: ApiConstance.imageUrl(
+                          recommendation[index].backdropPath!),
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[850]!,
+                        highlightColor: Colors.grey[800]!,
+                        child: Container(
+                          height: 170.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                      height: 180.0,
+                      fit: BoxFit.cover,
+                    )),
+              ),
+            );
           },
         ),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -46,7 +46,6 @@ class NowPlayingComponent extends StatelessWidget {
                               builder: (BuildContext context) =>
                                   MovieDetailScreen(
                                     id: item.id,
-                                    newMovie: item,
                                   ),
                             ),
                           );

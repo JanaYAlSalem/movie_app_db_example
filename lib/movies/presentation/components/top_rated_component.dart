@@ -48,7 +48,6 @@ class TopRatedComponent extends StatelessWidget {
                                 builder: (BuildContext context) =>
                                     MovieDetailScreen(
                                       id: movie.id,
-                                      newMovie: movie,
                                     ),
                               ),
                             );

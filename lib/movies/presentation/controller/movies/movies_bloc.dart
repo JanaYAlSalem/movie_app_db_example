@@ -96,7 +96,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       )),
           (r) => emit(
         state.copyWith(
-          favoriteMovies: r,
+          //favoriteMovies: r,
           favoriteState: RequestState.loaded,
         ),
       ),

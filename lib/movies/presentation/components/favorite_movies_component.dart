@@ -1,9 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_db_example/core/network/api_constance.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
+import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_bloc.dart';
 import 'package:movie_app_db_example/movies/presentation/controller/movies/movies_state.dart';
 import 'package:movie_app_db_example/movies/presentation/screens/movie_detail_screen.dart';
@@ -16,12 +18,12 @@ class FavoriteMovies extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesBloc, MoviesState>(
         buildWhen: (previous, current) =>
-        previous.favoriteMovies != current.favoriteMovies,
+        previous.favoriteState != current.favoriteState,
         builder: (context, state) {
           switch (state.favoriteState) {
             case RequestState.loading:
               return const SizedBox(
-                height: 170.0,
+                height: 400.0,
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -29,68 +31,113 @@ class FavoriteMovies extends StatelessWidget {
             case RequestState.loaded:
               return FadeIn(
                 duration: const Duration(milliseconds: 500),
-                child: SizedBox(
-                  height: 170.0,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    itemCount: state.favoriteMovies.length,
-                    itemBuilder: (context, index) {
-                      final movie = state.favoriteMovies[index];
-                      // return Container(
-                      //   padding: const EdgeInsets.only(right: 8.0),
-                      //   child: InkWell(
-                      //     onTap: () {
-                      //       Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //           builder: (BuildContext context) =>
-                      //               // MovieDetailScreen(
-                      //               //   id: movie.id,
-                      //               //   newMovie: movie,
-                      //               // ),
-                      //         ),
-                      //       );
-                      //     },
-                      //     child: ClipRRect(
-                      //       borderRadius:
-                      //       const BorderRadius.all(Radius.circular(8.0)),
-                      //       child: Text("${movie.title}")
-                      //       // CachedNetworkImage(
-                      //       //   width: 120.0,
-                      //       //   fit: BoxFit.cover,
-                      //       //   imageUrl: ApiConstance.imageUrl(movie.backdropPath),
-                      //       //   placeholder: (context, url) => Shimmer.fromColors(
-                      //       //     baseColor: Colors.grey[850]!,
-                      //       //     highlightColor: Colors.grey[800]!,
-                      //       //     child: Container(
-                      //       //       height: 170.0,
-                      //       //       width: 120.0,
-                      //       //       decoration: BoxDecoration(
-                      //       //         color: Colors.black,
-                      //       //         borderRadius: BorderRadius.circular(8.0),
-                      //       //       ),
-                      //       //     ),
-                      //       //   ),
-                      //       //   errorWidget: (context, url, error) =>
-                      //       //   const Icon(Icons.error),
-                      //       // ),
-                      //     ),
-                      //   ),
-                      // );
-                    },
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 400.0,
+                    viewportFraction: 1.0,
+                    onPageChanged: (index, reason) {},
                   ),
+                  items: state.favoriteMovies.map(
+                        (item) {
+                      return GestureDetector(
+                        key: const Key('openMovieMinimalDetail'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  MovieDetailScreen(
+                                    id: item.idMovieModel,
+                                  ),
+                            ),
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            ShaderMask(
+                              shaderCallback: (rect) {
+                                return const LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    // fromLTRB
+                                    Colors.transparent,
+                                    Colors.black,
+                                    Colors.black,
+                                    Colors.transparent,
+                                  ],
+                                  stops: [0, 0.3, 0.5, 1],
+                                ).createShader(
+                                  Rect.fromLTRB(0, 0, rect.width, rect.height),
+                                );
+                              },
+                              blendMode: BlendMode.dstIn,
+                              child:
+                              CachedNetworkImage(
+                                height: 560.0,
+                                imageUrl:
+                                ApiConstance.imageUrl(item.backdropPath),
+                                fit: BoxFit.cover,
+                              )
+                              ,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(bottom: 16.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.circle,
+                                          color: Colors.redAccent,
+                                          size: 16.0,
+                                        ),
+                                        const SizedBox(width: 4.0),
+                                        Text(
+                                          'Favorite Movies'.toUpperCase(),
+                                          style: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(bottom: 16.0),
+                                    child: Text(
+                                      item.title,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ).toList(),
                 ),
               );
             case RequestState.error:
               return SizedBox(
-                height: 170.0,
+                height: 400.0,
                 child: Center(
-                  child: Text(state.favoriteMessage),
+                  child: Text(state.nowPlayingMessage),
                 ),
               );
           }
-        });
-  }
+        });  }
 }

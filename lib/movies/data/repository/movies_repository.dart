@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:isar/isar.dart';
 import 'package:movie_app_db_example/core/error/exceptions.dart';
 import 'package:movie_app_db_example/core/error/failure.dart';
 import 'package:movie_app_db_example/movies/data/datasource/movie_local_data_source.dart';
@@ -16,7 +17,8 @@ class MoviesRepository extends BaseMoviesRepository {
   final BaseMovieRemoteDataSource baseMovieRemoteDataSource;
   final BaseMovieLocalDataSource baseMovieLocalDataSource;
 
-  MoviesRepository(this.baseMovieRemoteDataSource, this.baseMovieLocalDataSource);
+  MoviesRepository(
+      this.baseMovieRemoteDataSource, this.baseMovieLocalDataSource);
 
   @override
   Future<Either<Failure, List<Movie>>> getNowPlayingMovies() async {
@@ -72,8 +74,10 @@ class MoviesRepository extends BaseMoviesRepository {
   }
 
   @override
-  Future<Either<Failure, void>> addFavoriteMovies(MovieModel favoriteMovie) async {
-    final result = await baseMovieLocalDataSource.addFavoriteMovies(favoriteMovie);
+  Future<Either<Failure, void>> addFavoriteMovies(
+      MovieModel favoriteMovie) async {
+    final result =
+    await baseMovieLocalDataSource.addFavoriteMovies(favoriteMovie);
     try {
       return Right(result);
     } on ServerException catch (failure) {
@@ -92,7 +96,7 @@ class MoviesRepository extends BaseMoviesRepository {
   }
 
   @override
-  Future<Either<Failure, List<MovieModelDB>>> getAllFavoriteMovies() async {
+  Future<Either<Failure, IsarCollection<MovieModelDB>>> getAllFavoriteMovies() async {
     final result = await baseMovieLocalDataSource.getAllFavoriteMovies();
     try {
       return Right(result);
@@ -101,4 +105,13 @@ class MoviesRepository extends BaseMoviesRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, bool>> isFavoriteMovie(int id) async {
+    final result = await baseMovieLocalDataSource.isFavoriteMovie(id);
+    try {
+      return Right(result);
+    } on ServerException catch (failure) {
+      return Left(DatabaseFailure(failure.errorMessageModel.statusMessage));
+    }
+  }
 }

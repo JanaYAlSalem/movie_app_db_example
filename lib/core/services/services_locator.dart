@@ -6,6 +6,7 @@ import 'package:movie_app_db_example/movies/domain/repository/base_movies_reposi
 import 'package:movie_app_db_example/movies/domain/usecases/local/add_favorite_movies_use_case.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/local/delete_favorite_movies.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/local/get_favorite_movies_usecase.dart';
+import 'package:movie_app_db_example/movies/domain/usecases/local/is_favorite_use_case.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_movie_details_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playing_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_movies_usecase.dart';
@@ -22,7 +23,7 @@ class ServicesLocator {
     servicesLocator.registerFactory(() => MoviesBloc(servicesLocator(),
         servicesLocator(), servicesLocator(), servicesLocator()));
     servicesLocator.registerFactory(() => MovieDetailsBloc(servicesLocator(),
-        servicesLocator(), servicesLocator(), servicesLocator()));
+        servicesLocator(), servicesLocator(),servicesLocator(),servicesLocator()));
 
     /// Remote Use Cases
     servicesLocator.registerLazySingleton(
@@ -37,12 +38,10 @@ class ServicesLocator {
         () => GetRecommendationUseCase(servicesLocator()));
 
     // Local Use Cases
-    servicesLocator.registerLazySingleton(
-        () => GetFavoriteMoviesUseCase(servicesLocator()));
-    servicesLocator.registerLazySingleton(
-        () => AddFavoriteMoviesUseCase(servicesLocator()));
-    servicesLocator.registerLazySingleton(
-        () => DeleteFavoriteMoviesUseCase(servicesLocator()));
+    servicesLocator.registerLazySingleton(() => GetFavoriteMoviesUseCase(servicesLocator()));
+    servicesLocator.registerLazySingleton(() => AddFavoriteMoviesUseCase(servicesLocator()));
+    servicesLocator.registerLazySingleton(() => DeleteFavoriteMoviesUseCase(servicesLocator()));
+    servicesLocator.registerLazySingleton(() => IsFavoriteMovieUseCase(servicesLocator()));
 
     /// Repository
     servicesLocator.registerLazySingleton<BaseMoviesRepository>(

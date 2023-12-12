@@ -39,3 +39,12 @@ class DeleteFavoriteMoviesEvent extends MovieDetailsEvent {
   @override
   List<Object> get props => [id];
 }
+
+class IsFavoriteMovieEvent extends MovieDetailsEvent {
+  final int id;
+
+  const IsFavoriteMovieEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}

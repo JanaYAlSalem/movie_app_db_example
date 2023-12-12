@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:isar/isar.dart';
 import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/data/models/movies_model_db.dart';
@@ -10,7 +9,9 @@ abstract class BaseMovieLocalDataSource {
 
   Future<void> deleteFavoriteMovies(int id);
 
-  Future<List<MovieModelDB>> getAllFavoriteMovies();
+  Future<IsarCollection<MovieModelDB>> getAllFavoriteMovies();
+
+  Future<bool> isFavoriteMovie(int id);
 }
 
 class MovieLocalDataSource extends BaseMovieLocalDataSource {
@@ -39,17 +40,36 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
 
   @override
   Future<void> deleteFavoriteMovies(int id) async {
-    // final existingUser = await isar.movieModelDBs.get(id); // get
-    await isar.movieModelDBs.delete(id);
+    await isar.writeTxn(() async {
+      await isar.movieModelDBs.filter().idMovieModelEqualTo(id).deleteFirst();
+    });
+  }
+
+  @override
+  Future<IsarCollection<MovieModelDB>> getAllFavoriteMovies() async {
+    // print("------------ ${isar.isOpen}");
+    // if (!isar.isOpen)
+    await openDB();
+    final favoritMovies = isar.movieModelDBs;
+
+    print(favoritMovies);
+    return favoritMovies;
     throw UnimplementedError();
   }
 
   @override
-  Future<List<MovieModelDB>> getAllFavoriteMovies() async {
-    // print("------------ ${isar.isOpen}");
-    // if (!isar.isOpen)
-    await openDB();
-    // final favoritMovies = isar.movieModelDBs;
-    throw UnimplementedError();
+  Future<bool> isFavoriteMovie(int id) async {
+    // TODO: implement _getMovieById
+    final s =
+    await isar.movieModelDBs.filter().idMovieModelEqualTo(id).findAll();
+    if (s.isNotEmpty) {
+      print("########### isNotEmpty");
+      return true;
+      //delete
+    } else {
+      print("########### isEmpty");
+      return false;
+      // add
+    }
   }
 }
