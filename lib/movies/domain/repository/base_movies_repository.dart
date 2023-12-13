@@ -23,7 +23,7 @@ abstract class BaseMoviesRepository {
 
   Future<Either<Failure, bool>> addFavoriteMovies(MovieModel favoriteMovie);
 
-  Future<Either<Failure, void>> deleteFavoriteMovies(int id);
+  Future<Either<Failure, bool>> deleteFavoriteMovies(int id);
 
   Future<Either<Failure, List<MovieModelDB>>> getAllFavoriteMovies();
 

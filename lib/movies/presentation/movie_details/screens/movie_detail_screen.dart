@@ -59,12 +59,10 @@ class MovieDetailContent extends StatelessWidget {
                   leading: IconButton(
                     onPressed: () {
                       Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  MoviesScreen(),
-                            )
-                            );
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => MoviesScreen(),
+                          ));
                     },
                     icon: Icon(
                       Icons.chevron_left,
@@ -113,20 +111,27 @@ class MovieDetailContent extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Text(state.movieDetail!.title,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 1.2,
-                                  )),
+                              Expanded(
+                                child: Text(state.movieDetail!.title,
+                                    maxLines: 5,
+                                    overflow: TextOverflow.visible,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 1.2,
+                                    )),
+                              ),
                               Spacer(),
                               // state.isFavorite ?
                               IconButton(
                                 onPressed: () async {
-                                  context.read<MovieDetailsBloc>().add(IsFavoriteMovieEvent(state.movieDetail!.id));
-                                  print("2++++++++++++++++++++++${state.isFavorite}");
+                                  context.read<MovieDetailsBloc>().add(
+                                      IsFavoriteMovieEvent(
+                                          state.movieDetail!.id));
+                                  print(
+                                      "2++++++++++++++++++++++${state.isFavorite}");
                                   state.isFavorite
-                                      ?  servicesLocator<MovieDetailsBloc>().add(
+                                      ? servicesLocator<MovieDetailsBloc>().add(
                                           DeleteFavoriteMoviesEvent(
                                               state.movieDetail!.id))
                                       : servicesLocator<MovieDetailsBloc>().add(

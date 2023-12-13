@@ -85,7 +85,7 @@ class MoviesRepository extends BaseMoviesRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteFavoriteMovies(int id) async {
+  Future<Either<Failure, bool>> deleteFavoriteMovies(int id) async {
     final result = await baseMovieLocalDataSource.deleteFavoriteMovies(id);
     try {
       return Right(result);

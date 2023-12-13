@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 abstract class BaseMovieLocalDataSource {
   Future<bool> addFavoriteMovies(MovieModel favoriteMovie);
 
-  Future<void> deleteFavoriteMovies(int id);
+  Future<bool> deleteFavoriteMovies(int id);
 
   Future<List<MovieModelDB>> getAllFavoriteMovies();
 
@@ -27,17 +27,16 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
   //     return isar;
   //   }
   // }
-  MovieLocalDataSource(){
+  MovieLocalDataSource() {
     isarDB = openD();
   }
 
-  Future<Isar> openD() async{
-    if(Isar.instanceNames.isEmpty){
+  Future<Isar> openD() async {
+    if (Isar.instanceNames.isEmpty) {
       final Directory dir = await getApplicationSupportDirectory();
       if (dir.existsSync()) {
         return await Isar.open([MovieModelDBSchema],
-            inspector: true,
-            directory: dir.path);
+            inspector: true, directory: dir.path);
       }
     }
     return Future.value(Isar.getInstance());
@@ -55,20 +54,25 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
       await isar.writeTxnSync(() => isar.movieModelDBs.putSync(newMovie));
       print("true added susc");
       return true;
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }
 
   @override
-  Future<void> deleteFavoriteMovies(int id) async {
+  Future<bool> deleteFavoriteMovies(int id) async {
     final isar = await isarDB;
-    await isar.writeTxn(() async {
-      await isar.movieModelDBs.filter().idMovieModelEqualTo(id).deleteFirst();
-    });
+
+    try {
+      await isar.writeTxn(() async {
+        await isar.movieModelDBs.filter().idMovieModelEqualTo(id).deleteFirst();
+      });
+      print("true deleted susc");
+      return false;
+    } catch (e) {
+      return true;
+    }
   }
-
-
 
   @override
   Future<List<MovieModelDB>> getAllFavoriteMovies() async {
@@ -78,13 +82,11 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
     return favoritMovies;
   }
 
-
-
-
   @override
   Future<bool> isFavoriteMovie(int id) async {
     final isar = await isarDB;
-    final s = await isar.movieModelDBs.filter().idMovieModelEqualTo(id).findAll();
+    final s =
+        await isar.movieModelDBs.filter().idMovieModelEqualTo(id).findAll();
     if (s.isNotEmpty) {
       print("########### true, should be deleted ");
       return true;
@@ -94,6 +96,4 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
       // add
     }
   }
-
-
 }
