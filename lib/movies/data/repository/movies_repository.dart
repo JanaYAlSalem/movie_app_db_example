@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:isar/isar.dart';
 import 'package:movie_app_db_example/core/error/exceptions.dart';
 import 'package:movie_app_db_example/core/error/failure.dart';
 import 'package:movie_app_db_example/movies/data/datasource/movie_local_data_source.dart';
@@ -74,7 +73,7 @@ class MoviesRepository extends BaseMoviesRepository {
   }
 
   @override
-  Future<Either<Failure, void>> addFavoriteMovies(
+  Future<Either<Failure, bool>> addFavoriteMovies(
       MovieModel favoriteMovie) async {
     final result =
     await baseMovieLocalDataSource.addFavoriteMovies(favoriteMovie);

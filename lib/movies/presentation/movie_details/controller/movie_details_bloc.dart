@@ -89,6 +89,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
         overview: event.movieItem.overview,
         voteAverage: event.movieItem.voteAverage,
         releaseDate: event.movieItem.releaseDate));
+    print("Is Right : ${result.isRight()}");
     result.fold(
       (l) => emit(state.copyWith(
         favoriteState: FavoriteState.init,

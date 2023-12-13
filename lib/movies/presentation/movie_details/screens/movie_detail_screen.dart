@@ -8,7 +8,6 @@ import 'package:movie_app_db_example/core/services/services_locator.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
 import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/domain/entities/genres.dart';
-import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/domain/entities/recommendation.dart';
 import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_bloc.dart';
 import 'package:movie_app_db_example/movies/presentation/movies/screens/movies_screen.dart';
@@ -59,14 +58,13 @@ class MovieDetailContent extends StatelessWidget {
                   // automaticallyImplyLeading :false,
                   leading: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (BuildContext context) =>
-                      //         MoviesScreen(),
-                      //   ),
-                      // );
+                      Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  MoviesScreen(),
+                            )
+                            );
                     },
                     icon: Icon(
                       Icons.chevron_left,
@@ -127,9 +125,8 @@ class MovieDetailContent extends StatelessWidget {
                                 onPressed: () async {
                                   context.read<MovieDetailsBloc>().add(IsFavoriteMovieEvent(state.movieDetail!.id));
                                   print("2++++++++++++++++++++++${state.isFavorite}");
-
                                   state.isFavorite
-                                      ? servicesLocator<MovieDetailsBloc>().add(
+                                      ?  servicesLocator<MovieDetailsBloc>().add(
                                           DeleteFavoriteMoviesEvent(
                                               state.movieDetail!.id))
                                       : servicesLocator<MovieDetailsBloc>().add(

@@ -5,7 +5,7 @@ import 'package:movie_app_db_example/movies/data/models/movies_model_db.dart';
 import 'package:path_provider/path_provider.dart';
 
 abstract class BaseMovieLocalDataSource {
-  Future<void> addFavoriteMovies(MovieModel favoriteMovie);
+  Future<bool> addFavoriteMovies(MovieModel favoriteMovie);
 
   Future<void> deleteFavoriteMovies(int id);
 
@@ -44,16 +44,20 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
   }
 
   @override
-  Future<void> addFavoriteMovies(MovieModel favoriteMovie) async {
+  Future<bool> addFavoriteMovies(MovieModel favoriteMovie) async {
     MovieModelDB newMovie = MovieModelDB()
       ..idMovieModel = favoriteMovie.id
       ..title = favoriteMovie.title
       ..overview = favoriteMovie.overview
       ..backdropPath = favoriteMovie.backdropPath;
-
-    // if (!isar.isOpen) await openDB();
     final isar = await isarDB;
-    await isar.writeTxnSync(() => isar.movieModelDBs.putSync(newMovie));
+    try {
+      await isar.writeTxnSync(() => isar.movieModelDBs.putSync(newMovie));
+      print("true added susc");
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 
   @override

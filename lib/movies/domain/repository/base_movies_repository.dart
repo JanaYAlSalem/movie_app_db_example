@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:isar/isar.dart';
 import 'package:movie_app_db_example/core/error/failure.dart';
 import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/data/models/movies_model_db.dart';
@@ -22,7 +21,7 @@ abstract class BaseMoviesRepository {
   Future<Either<Failure, List<Recommendation>>> getRecommendation(
       RecommendationParameters parameters);
 
-  Future<Either<Failure, void>> addFavoriteMovies(MovieModel favoriteMovie);
+  Future<Either<Failure, bool>> addFavoriteMovies(MovieModel favoriteMovie);
 
   Future<Either<Failure, void>> deleteFavoriteMovies(int id);
 
