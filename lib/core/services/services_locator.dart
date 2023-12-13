@@ -48,10 +48,8 @@ class ServicesLocator {
         () => MoviesRepository(servicesLocator(), servicesLocator()));
 
     /// DATA SOURCE
-    servicesLocator.registerLazySingleton<BaseMovieRemoteDataSource>(
-        () => MovieRemoteDataSource());
-    servicesLocator.registerFactory<BaseMovieLocalDataSource>(
-        () => MovieLocalDataSource());
+    servicesLocator.registerLazySingleton<BaseMovieRemoteDataSource>(() => MovieRemoteDataSource());
+    servicesLocator.registerFactory<BaseMovieLocalDataSource>(() => MovieLocalDataSource());
 
   }
 }

@@ -4,7 +4,8 @@ enum RequestState {
   error,
 }
 
-enum isFav {
+enum FavoriteState {
+  init,
   added,
   deleted,
 }

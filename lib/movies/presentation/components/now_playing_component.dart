@@ -38,7 +38,7 @@ class NowPlayingComponent extends StatelessWidget {
                   items: state.nowPlayingMovies.map(
                         (item) {
                       return GestureDetector(
-                        // key: const Key('openMovieMinimalDetail'),
+                        key: const Key('openMovieMinimalDetail'),
                         onTap: () {
                           Navigator.push(
                             context,

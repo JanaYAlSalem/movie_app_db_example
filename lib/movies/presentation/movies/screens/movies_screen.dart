@@ -25,7 +25,7 @@ class MoviesScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             body: SingleChildScrollView(
-              // key: const Key('movieScrollView'),
+              key: const Key('movieScrollView'),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -88,9 +88,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   FutureOr<void> _getFavoriteMovies(
       GetFavoriteMoviesEvent event, Emitter<MoviesState> emit) async {
     final result = await getFavoriteMoviesUseCase(const NoParameters());
-
-    print("----------------------- ${result}");
-
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FAV GET");
     result.fold(
           (l) => emit(state.copyWith(
         topRatedMessage: l.message,

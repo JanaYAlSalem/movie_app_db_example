@@ -44,11 +44,11 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     ));
 
     result.fold(
-          (l) => emit(state.copyWith(
+      (l) => emit(state.copyWith(
         movieDetailsState: RequestState.error,
         movieDetailsMessage: l.message,
       )),
-          (r) => emit(
+      (r) => emit(
         state.copyWith(
           movieDetail: r,
           movieDetailsState: RequestState.loaded,
@@ -66,11 +66,11 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     );
 
     result.fold(
-          (l) => emit(state.copyWith(
+      (l) => emit(state.copyWith(
         recommendationState: RequestState.error,
         recommendationMessage: l.message,
       )),
-          (r) => emit(
+      (r) => emit(
         state.copyWith(
           recommendation: r,
           recommendationState: RequestState.loaded,
@@ -90,14 +90,14 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
         voteAverage: event.movieItem.voteAverage,
         releaseDate: event.movieItem.releaseDate));
     result.fold(
-          (l) => emit(state.copyWith(
-        // recommendationState: RequestState.error,
-        // recommendationMessage: l.message,
+      (l) => emit(state.copyWith(
+        favoriteState: FavoriteState.init,
+        favoriteMessage: l.message,
       )),
-          (r) => emit(
+      (r) => emit(
         state.copyWith(
-          // recommendation: r,
-          // recommendationState: RequestState.loaded,
+          favoriteState: FavoriteState.added,
+          isFavorite: true
         ),
       ),
     );
@@ -108,14 +108,14 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     final result = await deleteFavoriteMoviesUseCase(event.id);
 
     result.fold(
-          (l) => emit(state.copyWith(
-        // recommendationState: RequestState.error,
-        // recommendationMessage: l.message,
+      (l) => emit(state.copyWith(
+        favoriteState: FavoriteState.init,
+        favoriteMessage: l.message,
       )),
-          (r) => emit(
+      (r) => emit(
         state.copyWith(
-          // recommendation: r,
-          // recommendationState: RequestState.loaded,
+          favoriteState: FavoriteState.deleted,
+          isFavorite: false
         ),
       ),
     );
@@ -124,12 +124,11 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   FutureOr<void> _isFavoriteMovie(
       IsFavoriteMovieEvent event, Emitter<MovieDetailsState> emit) async {
     final result = await isFavoriteMoviesUseCase(event.id);
+    print("1++++++++++++++++++++++${state.isFavorite}");
 
     result.fold(
-          (l) => emit(state.copyWith(
-        // recommendationState: RequestState.error,
-      )),
-          (r) => emit(
+      (l) => emit(state.copyWith()),
+      (r) => emit(
         state.copyWith(
           isFavorite: r,
         ),

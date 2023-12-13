@@ -1,11 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_db_example/core/network/api_constance.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
-import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_bloc.dart';
 import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_state.dart';
 import 'package:movie_app_db_example/movies/presentation/movie_details/screens/movie_detail_screen.dart';
@@ -18,7 +16,7 @@ class FavoriteMovies extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesBloc, MoviesState>(
         buildWhen: (previous, current) =>
-        previous.favoriteState != current.favoriteState,
+            previous.favoriteState != current.favoriteState,
         builder: (context, state) {
           switch (state.favoriteState) {
             case RequestState.loading:
@@ -49,19 +47,19 @@ class FavoriteMovies extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     MovieDetailScreen(
-                                      id: movie.id,
+                                      id: movie.idMovieModel,
                                     ),
                               ),
                             );
                           },
                           child: ClipRRect(
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0)),
+                                const BorderRadius.all(Radius.circular(8.0)),
                             child: CachedNetworkImage(
                               width: 120.0,
                               fit: BoxFit.cover,
                               imageUrl:
-                              ApiConstance.imageUrl(movie.backdropPath),
+                                  ApiConstance.imageUrl(movie.backdropPath),
                               placeholder: (context, url) => Shimmer.fromColors(
                                 baseColor: Colors.grey[850]!,
                                 highlightColor: Colors.grey[800]!,
@@ -75,7 +73,7 @@ class FavoriteMovies extends StatelessWidget {
                                 ),
                               ),
                               errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                                  const Icon(Icons.error),
                             ),
                           ),
                         ),
@@ -92,5 +90,6 @@ class FavoriteMovies extends StatelessWidget {
                 ),
               );
           }
-        });  }
+        });
+  }
 }

@@ -3,8 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_db_example/core/network/api_constance.dart';
+import 'package:movie_app_db_example/core/services/services_locator.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
 import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_event.dart';
 import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_state.dart';
 import 'package:movie_app_db_example/movies/presentation/movie_details/screens/movie_detail_screen.dart';
 import 'package:shimmer/shimmer.dart';
@@ -42,6 +44,15 @@ class TopRatedComponent extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: InkWell(
                           onTap: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (BuildContext context) =>
+                            //         MovieDetailScreen(
+                            //           id: movie.id,
+                            //         ),
+                            //   ),
+                            // );
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -50,8 +61,14 @@ class TopRatedComponent extends StatelessWidget {
                                       id: movie.id,
                                     ),
                               ),
-                            );
-                          },
+                            ).then((_) => {
+                              print("@@@@@@@@@@@_____________###########"),
+                              // context.read<MoviesBloc>().add(GetFavoriteMoviesEvent()),
+                              servicesLocator<MoviesBloc>().add(GetFavoriteMoviesEvent()),
+                              print("@@@@@@@@@@@@@@@@@@@@@###########")
+                            });
+
+                            },
                           child: ClipRRect(
                             borderRadius:
                             const BorderRadius.all(Radius.circular(8.0)),

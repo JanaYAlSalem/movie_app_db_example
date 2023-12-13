@@ -11,6 +11,7 @@ import 'package:movie_app_db_example/movies/domain/entities/genres.dart';
 import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/domain/entities/recommendation.dart';
 import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/movies/screens/movies_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MovieDetailScreen extends StatelessWidget {
@@ -43,6 +44,7 @@ class MovieDetailContent extends StatelessWidget {
     return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
       builder: (context, state) {
         final recommendation = state.recommendation;
+        print(")))))))))))) state.favoriteState: ${state.favoriteState}");
         switch (state.movieDetailsState) {
           case RequestState.loading:
             return const Center(
@@ -50,10 +52,27 @@ class MovieDetailContent extends StatelessWidget {
             );
           case RequestState.loaded:
             return CustomScrollView(
-              // key: const Key('movieDetailScrollView'),
+              key: const Key('movieDetailScrollView'),
               slivers: [
                 SliverAppBar(
                   pinned: true,
+                  // automaticallyImplyLeading :false,
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (BuildContext context) =>
+                      //         MoviesScreen(),
+                      //   ),
+                      // );
+                    },
+                    icon: Icon(
+                      Icons.chevron_left,
+                      color: Colors.white,
+                    ),
+                  ),
                   expandedHeight: 250.0,
                   flexibleSpace: FlexibleSpaceBar(
                     background: FadeIn(
@@ -103,44 +122,34 @@ class MovieDetailContent extends StatelessWidget {
                                     letterSpacing: 1.2,
                                   )),
                               Spacer(),
-                              state.isFavorite
-                                  ? IconButton(
-                                      onPressed: () async {
-                                        print(
-                                            "state.isFavorite: ${state.isFavorite}");
-                                        servicesLocator<MovieDetailsBloc>().add(
-                                            IsFavoriteMovieEvent(
-                                                state.movieDetail!.id));
+                              // state.isFavorite ?
+                              IconButton(
+                                onPressed: () async {
+                                  context.read<MovieDetailsBloc>().add(IsFavoriteMovieEvent(state.movieDetail!.id));
+                                  print("2++++++++++++++++++++++${state.isFavorite}");
 
-                                        servicesLocator<MovieDetailsBloc>().add(
-                                            DeleteFavoriteMoviesEvent(
-                                                state.movieDetail!.id));
-                                      },
-                                      color: Colors.red,
-                                      icon: Icon(Icons.favorite),
-                                    )
-                                  : IconButton(
-                                      onPressed: () async {
-                                        print(
-                                            "state.isFavorite: ${state.isFavorite}");
-
-                                        servicesLocator<MovieDetailsBloc>().add(
-                                            AddFavoriteMoviesEvent(MovieModel(
-                                                id: state.movieDetail!.id,
-                                                title: state.movieDetail!.title,
-                                                backdropPath: state
-                                                    .movieDetail!.backdropPath,
-                                                overview:
-                                                    state.movieDetail!.overview,
-                                                releaseDate: state
-                                                    .movieDetail!.releaseDate,
-                                                voteAverage: state
-                                                    .movieDetail!.voteAverage,
-                                                genreIds: [])));
-                                      },
-                                      color: Colors.grey,
-                                      icon: Icon(Icons.favorite),
-                                    )
+                                  state.isFavorite
+                                      ? servicesLocator<MovieDetailsBloc>().add(
+                                          DeleteFavoriteMoviesEvent(
+                                              state.movieDetail!.id))
+                                      : servicesLocator<MovieDetailsBloc>().add(
+                                          AddFavoriteMoviesEvent(MovieModel(
+                                              id: state.movieDetail!.id,
+                                              title: state.movieDetail!.title,
+                                              backdropPath: state
+                                                  .movieDetail!.backdropPath,
+                                              overview:
+                                                  state.movieDetail!.overview,
+                                              releaseDate: state
+                                                  .movieDetail!.releaseDate,
+                                              voteAverage: state
+                                                  .movieDetail!.voteAverage,
+                                              genreIds: [])));
+                                },
+                                color:
+                                    state.isFavorite ? Colors.red : Colors.grey,
+                                icon: Icon(Icons.favorite),
+                              )
                             ],
                           ),
                           const SizedBox(height: 8.0),
