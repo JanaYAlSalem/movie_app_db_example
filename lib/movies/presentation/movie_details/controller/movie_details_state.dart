@@ -9,7 +9,6 @@ class MovieDetailsState extends Equatable {
       this.recommendationState = RequestState.loading,
       this.recommendationMessage = '',
       this.isFavorite = false,
-        this.favoriteState = FavoriteState.init,
         this.favoriteMessage = ""
       });
 
@@ -22,7 +21,6 @@ class MovieDetailsState extends Equatable {
   final String recommendationMessage;
 
   final bool isFavorite;
-  final FavoriteState favoriteState;
   final String favoriteMessage;
 
   MovieDetailsState copyWith(
@@ -33,7 +31,6 @@ class MovieDetailsState extends Equatable {
       RequestState? recommendationState,
       String? recommendationMessage,
       bool? isFavorite,
-      FavoriteState? favoriteState,
       String? favoriteMessage}) {
     return MovieDetailsState(
         movieDetail: movieDetail ?? this.movieDetail,
@@ -44,7 +41,6 @@ class MovieDetailsState extends Equatable {
         recommendationMessage:
             recommendationMessage ?? this.recommendationMessage,
         isFavorite: isFavorite ?? this.isFavorite,
-        favoriteState: favoriteState ?? this.favoriteState,
         favoriteMessage : favoriteMessage ?? this.favoriteMessage
     );
   }
@@ -60,7 +56,6 @@ class MovieDetailsState extends Equatable {
         recommendationMessage,
 
         isFavorite,
-        favoriteState,
         favoriteMessage
 
       ];

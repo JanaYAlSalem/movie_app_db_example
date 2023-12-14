@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,7 +17,7 @@ import 'package:shimmer/shimmer.dart';
 class MovieDetailScreen extends StatelessWidget {
   final int id;
 
-  const MovieDetailScreen({Key? key, required this.id}) : super(key: key);
+  MovieDetailScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,9 @@ class MovieDetailScreen extends StatelessWidget {
   }
 }
 
+Color buttonColor = Colors.grey;
+bool butFav = false;
+
 class MovieDetailContent extends StatelessWidget {
   const MovieDetailContent({
     Key? key,
@@ -40,10 +44,23 @@ class MovieDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+    return BlocConsumer<MovieDetailsBloc, MovieDetailsState>(
+      listener: (context, state) {
+        buttonColor = state.isFavorite ? Colors.red : Colors.grey;
+        butFav = state.isFavorite ? true : false;
+        // state.isFavorite ? servicesLocator<MovieDetailsBloc>().add(DeleteFavoriteMoviesEvent(state.movieDetail!.id))
+        //     : servicesLocator<MovieDetailsBloc>().add(AddFavoriteMoviesEvent(
+        //         MovieModel(
+        //             id: state.movieDetail!.id,
+        //             title: state.movieDetail!.title,
+        //             backdropPath: state.movieDetail!.backdropPath,
+        //             overview: state.movieDetail!.overview,
+        //             releaseDate: state.movieDetail!.releaseDate,
+        //             voteAverage: state.movieDetail!.voteAverage,
+        //             genreIds: [])));
+      },
       builder: (context, state) {
         final recommendation = state.recommendation;
-        print(")))))))))))) state.favoriteState: ${state.favoriteState}");
         switch (state.movieDetailsState) {
           case RequestState.loading:
             return const Center(
@@ -51,7 +68,6 @@ class MovieDetailContent extends StatelessWidget {
             );
           case RequestState.loaded:
             return CustomScrollView(
-              key: const Key('movieDetailScrollView'),
               slivers: [
                 SliverAppBar(
                   pinned: true,
@@ -128,28 +144,32 @@ class MovieDetailContent extends StatelessWidget {
                                   context.read<MovieDetailsBloc>().add(
                                       IsFavoriteMovieEvent(
                                           state.movieDetail!.id));
-                                  print(
-                                      "2++++++++++++++++++++++${state.isFavorite}");
-                                  state.isFavorite
-                                      ? servicesLocator<MovieDetailsBloc>().add(
-                                          DeleteFavoriteMoviesEvent(
-                                              state.movieDetail!.id))
-                                      : servicesLocator<MovieDetailsBloc>().add(
-                                          AddFavoriteMoviesEvent(MovieModel(
-                                              id: state.movieDetail!.id,
-                                              title: state.movieDetail!.title,
-                                              backdropPath: state
-                                                  .movieDetail!.backdropPath,
-                                              overview:
-                                                  state.movieDetail!.overview,
-                                              releaseDate: state
-                                                  .movieDetail!.releaseDate,
-                                              voteAverage: state
-                                                  .movieDetail!.voteAverage,
-                                              genreIds: [])));
+                                  context
+                                      .read<MovieDetailsBloc>()
+                                      .listen((newState) {
+                                    print("is favorite ${newState.isFavorite}");
+                                  });
+                                  print("is favorite ${state.isFavorite}");
+                                  if(butFav){
+                                    servicesLocator<MovieDetailsBloc>().add(DeleteFavoriteMoviesEvent(state.movieDetail!.id));
+                                  butFav = !butFav ;
+                                    buttonColor = Colors.grey;
+                                  }else{
+                                    servicesLocator<MovieDetailsBloc>().add(AddFavoriteMoviesEvent(
+                                        MovieModel(
+                                            id: state.movieDetail!.id,
+                                            title: state.movieDetail!.title,
+                                            backdropPath: state.movieDetail!.backdropPath,
+                                            overview: state.movieDetail!.overview,
+                                            releaseDate: state.movieDetail!.releaseDate,
+                                            voteAverage: state.movieDetail!.voteAverage,
+                                            genreIds: [])));
+                                    butFav = !butFav;
+                                    buttonColor = Colors.red;
+
+                                  }
                                 },
-                                color:
-                                    state.isFavorite ? Colors.red : Colors.grey,
+                                color: state.isFavorite ? Colors.red : Colors.grey,
                                 icon: Icon(Icons.favorite),
                               )
                             ],

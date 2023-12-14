@@ -52,7 +52,7 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
     final isar = await isarDB;
     try {
       await isar.writeTxnSync(() => isar.movieModelDBs.putSync(newMovie));
-      print("true added susc");
+      print("MovieLocalDataSource,deleteFavoriteMovies:  added susc");
       return true;
     } catch (e) {
       return false;
@@ -67,7 +67,7 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
       await isar.writeTxn(() async {
         await isar.movieModelDBs.filter().idMovieModelEqualTo(id).deleteFirst();
       });
-      print("true deleted susc");
+      print("MovieLocalDataSource,deleteFavoriteMovies: deleted susc");
       return false;
     } catch (e) {
       return true;
@@ -88,10 +88,10 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
     final s =
         await isar.movieModelDBs.filter().idMovieModelEqualTo(id).findAll();
     if (s.isNotEmpty) {
-      print("########### true, should be deleted ");
+      print("MovieLocalDataSource- isFav ########### true, should be deleted ");
       return true;
     } else {
-      print("########### false, should be added");
+      print("MovieLocalDataSource - isFav ########### false, should be added");
       return false;
       // add
     }

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
@@ -13,7 +12,6 @@ import 'package:movie_app_db_example/movies/domain/usecases/remote/get_movie_det
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
 
 part 'movie_details_event.dart';
-
 part 'movie_details_state.dart';
 
 class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
@@ -89,19 +87,10 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
         overview: event.movieItem.overview,
         voteAverage: event.movieItem.voteAverage,
         releaseDate: event.movieItem.releaseDate));
-    print("Is Right : ${result.isRight()}");
+
     result.fold(
-      (l) => emit(state.copyWith(
-        favoriteState: FavoriteState.init,
-        favoriteMessage: l.message,
-      )),
-      (r) => emit(
-        state.copyWith(
-          favoriteState: FavoriteState.added,
-          isFavorite: true
-        ),
-      ),
-    );
+      (l) => emit(state.copyWith(favoriteMessage: l.message,)),
+      (r) => emit(state.copyWith(isFavorite: r),),);
   }
 
   FutureOr<void> _deleteFavoriteMovie(
@@ -109,15 +98,8 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     final result = await deleteFavoriteMoviesUseCase(event.id);
 
     result.fold(
-      (l) => emit(state.copyWith(
-        favoriteState: FavoriteState.init,
-        favoriteMessage: l.message,
-      )),
-      (r) => emit(
-        state.copyWith(
-          favoriteState: FavoriteState.deleted,
-          isFavorite: false
-        ),
+      (l) => emit(state.copyWith(favoriteMessage: l.message,)),
+      (r) => emit(state.copyWith(isFavorite: r),
       ),
     );
   }
@@ -125,14 +107,11 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   FutureOr<void> _isFavoriteMovie(
       IsFavoriteMovieEvent event, Emitter<MovieDetailsState> emit) async {
     final result = await isFavoriteMoviesUseCase(event.id);
-    print("1++++++++++++++++++++++${state.isFavorite}");
+    print("1- MovieDetailsBloc :++++++++++++++++++++++${state.isFavorite}");
 
     result.fold(
-      (l) => emit(state.copyWith()),
-      (r) => emit(
-        state.copyWith(
-          isFavorite: r,
-        ),
+      (l) => print("_isFavoriteMovie L,$l"),
+      (r) => emit(state.copyWith(isFavorite: r,),
       ),
     );
   }
