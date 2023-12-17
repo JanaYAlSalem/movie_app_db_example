@@ -35,7 +35,6 @@ class MovieDetailScreen extends StatelessWidget {
 }
 
 Color buttonColor = Colors.grey;
-bool butFav = false;
 
 class MovieDetailContent extends StatelessWidget {
   const MovieDetailContent({
@@ -47,17 +46,6 @@ class MovieDetailContent extends StatelessWidget {
     return BlocConsumer<MovieDetailsBloc, MovieDetailsState>(
       listener: (context, state) {
         buttonColor = state.isFavorite ? Colors.red : Colors.grey;
-        butFav = state.isFavorite ? true : false;
-        // state.isFavorite ? servicesLocator<MovieDetailsBloc>().add(DeleteFavoriteMoviesEvent(state.movieDetail!.id))
-        //     : servicesLocator<MovieDetailsBloc>().add(AddFavoriteMoviesEvent(
-        //         MovieModel(
-        //             id: state.movieDetail!.id,
-        //             title: state.movieDetail!.title,
-        //             backdropPath: state.movieDetail!.backdropPath,
-        //             overview: state.movieDetail!.overview,
-        //             releaseDate: state.movieDetail!.releaseDate,
-        //             voteAverage: state.movieDetail!.voteAverage,
-        //             genreIds: [])));
       },
       builder: (context, state) {
         final recommendation = state.recommendation;
@@ -138,7 +126,6 @@ class MovieDetailContent extends StatelessWidget {
                                     )),
                               ),
                               Spacer(),
-                              // state.isFavorite ?
                               IconButton(
                                 onPressed: () async {
                                   context.read<MovieDetailsBloc>().add(
@@ -150,26 +137,29 @@ class MovieDetailContent extends StatelessWidget {
                                     print("is favorite ${newState.isFavorite}");
                                   });
                                   print("is favorite ${state.isFavorite}");
-                                  if(butFav){
-                                    servicesLocator<MovieDetailsBloc>().add(DeleteFavoriteMoviesEvent(state.movieDetail!.id));
-                                  butFav = !butFav ;
-                                    buttonColor = Colors.grey;
-                                  }else{
-                                    servicesLocator<MovieDetailsBloc>().add(AddFavoriteMoviesEvent(
-                                        MovieModel(
+                                  if (state.isFavorite) {
+                                    servicesLocator<MovieDetailsBloc>().add(
+                                        DeleteFavoriteMoviesEvent(
+                                            state.movieDetail!.id));
+                                  } else {
+                                    servicesLocator<MovieDetailsBloc>().add(
+                                        AddFavoriteMoviesEvent(MovieModel(
                                             id: state.movieDetail!.id,
                                             title: state.movieDetail!.title,
-                                            backdropPath: state.movieDetail!.backdropPath,
-                                            overview: state.movieDetail!.overview,
-                                            releaseDate: state.movieDetail!.releaseDate,
-                                            voteAverage: state.movieDetail!.voteAverage,
+                                            backdropPath:
+                                                state.movieDetail!.backdropPath,
+                                            overview:
+                                                state.movieDetail!.overview,
+                                            releaseDate:
+                                                state.movieDetail!.releaseDate,
+                                            voteAverage:
+                                                state.movieDetail!.voteAverage,
                                             genreIds: [])));
-                                    butFav = !butFav;
-                                    buttonColor = Colors.red;
-
+                                    // butFav = !butFav;
+                                    // buttonColor = Colors.red;
                                   }
                                 },
-                                color: state.isFavorite ? Colors.red : Colors.grey,
+                                color: buttonColor,
                                 icon: Icon(Icons.favorite),
                               )
                             ],

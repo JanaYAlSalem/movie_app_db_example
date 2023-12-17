@@ -107,7 +107,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   FutureOr<void> _isFavoriteMovie(
       IsFavoriteMovieEvent event, Emitter<MovieDetailsState> emit) async {
     final result = await isFavoriteMoviesUseCase(event.id);
-    print("1- MovieDetailsBloc :++++++++++++++++++++++${state.isFavorite}");
+    print("1- MovieDetailsBloc _isFavoriteMovie :++++++++++++++++++++++${state.isFavorite}");
 
     result.fold(
       (l) => print("_isFavoriteMovie L,$l"),
