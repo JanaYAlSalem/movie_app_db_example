@@ -45,6 +45,7 @@ class MovieDetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<MovieDetailsBloc, MovieDetailsState>(
       listener: (context, state) {
+        print("BlocConsumer : listener ----------- ${state.isFavorite}");
         buttonColor = state.isFavorite ? Colors.red : Colors.grey;
       },
       builder: (context, state) {
@@ -128,15 +129,6 @@ class MovieDetailContent extends StatelessWidget {
                               Spacer(),
                               IconButton(
                                 onPressed: () async {
-                                  context.read<MovieDetailsBloc>().add(
-                                      IsFavoriteMovieEvent(
-                                          state.movieDetail!.id));
-                                  context
-                                      .read<MovieDetailsBloc>()
-                                      .listen((newState) {
-                                    print("is favorite ${newState.isFavorite}");
-                                  });
-                                  print("is favorite ${state.isFavorite}");
                                   if (state.isFavorite) {
                                     servicesLocator<MovieDetailsBloc>().add(
                                         DeleteFavoriteMoviesEvent(
@@ -155,9 +147,16 @@ class MovieDetailContent extends StatelessWidget {
                                             voteAverage:
                                                 state.movieDetail!.voteAverage,
                                             genreIds: [])));
-                                    // butFav = !butFav;
-                                    // buttonColor = Colors.red;
+
                                   }
+                                  // context.read<MovieDetailsBloc>().add(IsFavoriteMovieEvent(state.movieDetail!.id));
+                                  // context.read<MovieDetailsBloc>();
+                                  //     .listen((newState) {
+                                  //   print("is favorite ${newState.isFavorite}");
+                                  // });
+                                  // print("is favorite ${state.isFavorite}");
+                                  // // butFav = !butFav;
+                                  // // buttonColor = Colors.red;
                                 },
                                 color: buttonColor,
                                 icon: Icon(Icons.favorite),
