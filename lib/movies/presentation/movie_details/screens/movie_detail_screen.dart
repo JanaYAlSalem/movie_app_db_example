@@ -21,8 +21,11 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<MovieDetailsBloc>(
+      // create: (context) => context.read<MovieDetailsBloc>()
+      // create: (context) => MovieDetailsBloc.get(context)
       create: (context) => servicesLocator<MovieDetailsBloc>()
+        // create: (context) => BlocProvider.of<MovieDetailsBloc>(context)
         ..add(GetMovieDetailsEvent(id))
         ..add(GetMovieRecommendationEvent(id))
         ..add(IsFavoriteMovieEvent(id)),
@@ -147,7 +150,6 @@ class MovieDetailContent extends StatelessWidget {
                                             voteAverage:
                                                 state.movieDetail!.voteAverage,
                                             genreIds: [])));
-
                                   }
                                   // context.read<MovieDetailsBloc>().add(IsFavoriteMovieEvent(state.movieDetail!.id));
                                   // context.read<MovieDetailsBloc>();
@@ -306,56 +308,54 @@ class MovieDetailContent extends StatelessWidget {
   }
 
   Widget _showRecommendations(List<Recommendation> recommendation) {
-    return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
-      builder: (context, state) => SliverGrid(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => MovieDetailScreen(
-                      id: recommendation[index].id,
-                    ),
+    return SliverGrid(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MovieDetailScreen(
+                    id: recommendation[index].id,
                   ),
-                );
-              },
-              child: FadeInUp(
-                from: 20,
-                duration: const Duration(milliseconds: 500),
-                child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                    child: CachedNetworkImage(
-                      imageUrl: ApiConstance.imageUrl(
-                          recommendation[index].backdropPath!),
-                      placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey[850]!,
-                        highlightColor: Colors.grey[800]!,
-                        child: Container(
-                          height: 170.0,
-                          width: 120.0,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                ),
+              );
+            },
+            child: FadeInUp(
+              from: 20,
+              duration: const Duration(milliseconds: 500),
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                  child: CachedNetworkImage(
+                    imageUrl: ApiConstance.imageUrl(
+                        recommendation[index].backdropPath!),
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[850]!,
+                      highlightColor: Colors.grey[800]!,
+                      child: Container(
+                        height: 170.0,
+                        width: 120.0,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      height: 180.0,
-                      fit: BoxFit.cover,
-                    )),
-              ),
-            );
-          },
-        ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisSpacing: 8.0,
-          crossAxisSpacing: 8.0,
-          childAspectRatio: 0.7,
-          crossAxisCount: 3,
-        ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    height: 180.0,
+                    fit: BoxFit.cover,
+                  )),
+            ),
+          );
+        },
+      ),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisSpacing: 8.0,
+        crossAxisSpacing: 8.0,
+        childAspectRatio: 0.7,
+        crossAxisCount: 3,
       ),
     );
   }

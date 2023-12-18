@@ -36,6 +36,8 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   final DeleteFavoriteMoviesUseCase deleteFavoriteMoviesUseCase;
   final IsFavoriteMovieUseCase isFavoriteMoviesUseCase;
 
+  static MovieDetailsBloc get(context) =>BlocProvider.of(context);
+
   FutureOr<void> _getMovieDetails(
       GetMovieDetailsEvent event, Emitter<MovieDetailsState> emit) async {
     final result = await getMovieDetailsUseCase(MovieDetailsParameters(
@@ -91,7 +93,12 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
 
     result.fold(
       (l) => emit(state.copyWith(favoriteMessage: l.message,)),
-      (r) => emit(state.copyWith(isFavorite: r)));
+      (r) {
+        print("1_addFavoriteMovies  : ${state.isFavorite}");
+        emit(state.copyWith(isFavorite: r));
+        print("2_addFavoriteMovies  : ${state.isFavorite}");
+      }
+    );
 
   }
 
@@ -115,5 +122,6 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
       (r) => emit(state.copyWith(isFavorite: r),
       ),
     );
+
   }
 }
