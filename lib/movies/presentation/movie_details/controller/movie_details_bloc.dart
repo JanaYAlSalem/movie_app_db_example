@@ -36,8 +36,6 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   final DeleteFavoriteMoviesUseCase deleteFavoriteMoviesUseCase;
   final IsFavoriteMovieUseCase isFavoriteMoviesUseCase;
 
-  static MovieDetailsBloc get(context) =>BlocProvider.of(context);
-
   FutureOr<void> _getMovieDetails(
       GetMovieDetailsEvent event, Emitter<MovieDetailsState> emit) async {
     final result = await getMovieDetailsUseCase(MovieDetailsParameters(

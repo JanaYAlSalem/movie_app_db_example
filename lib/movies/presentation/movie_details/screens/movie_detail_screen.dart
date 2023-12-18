@@ -11,6 +11,7 @@ import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/domain/entities/genres.dart';
 import 'package:movie_app_db_example/movies/domain/entities/recommendation.dart';
 import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_cubit.dart';
 import 'package:movie_app_db_example/movies/presentation/movies/screens/movies_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -21,18 +22,229 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MovieDetailsBloc>(
-      // create: (context) => context.read<MovieDetailsBloc>()
-      // create: (context) => MovieDetailsBloc.get(context)
-      create: (context) => servicesLocator<MovieDetailsBloc>()
-        // create: (context) => BlocProvider.of<MovieDetailsBloc>(context)
-        ..add(GetMovieDetailsEvent(id))
-        ..add(GetMovieRecommendationEvent(id))
-        ..add(IsFavoriteMovieEvent(id)),
-      lazy: false,
-      child: const Scaffold(
-        body: MovieDetailContent(),
-      ),
+    return BlocProvider(
+        create: (context) => MovieDetailsCubit(),
+        child: BlocConsumer<MovieDetailsCubit, MovieDetailsStates>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              return Scaffold(
+                body:  CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      pinned: true,
+                      // automaticallyImplyLeading :false,
+                      leading: IconButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => MoviesScreen(),
+                              ));
+                        },
+                        icon: Icon(
+                          Icons.chevron_left,
+                          color: Colors.white,
+                        ),
+                      ),
+                      expandedHeight: 250.0,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: FadeIn(
+                          duration: const Duration(milliseconds: 500),
+                          child: ShaderMask(
+                            shaderCallback: (rect) {
+                              return const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black,
+                                  Colors.black,
+                                  Colors.transparent,
+                                ],
+                                stops: [0.0, 0.5, 1.0, 1.0],
+                              ).createShader(
+                                Rect.fromLTRB(0.0, 0.0, rect.width, rect.height),
+                              );
+                            },
+                            blendMode: BlendMode.dstIn,
+                            child: CachedNetworkImage(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              imageUrl: ApiConstance.imageUrl(
+                                ""
+                                  // state.movieDetail!.backdropPath
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: FadeInUp(
+                        from: 20,
+                        duration: const Duration(milliseconds: 500),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(state.movieDetail!.title,
+                                        maxLines: 5,
+                                        overflow: TextOverflow.visible,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: 1.2,
+                                        )),
+                                  ),
+                                  Spacer(),
+                                  IconButton(
+                                    onPressed: () async {
+                                      if (MovieDetailsCubit.get(context).isFavorite) {
+                                        servicesLocator<MovieDetailsBloc>().add(
+                                            DeleteFavoriteMoviesEvent(state.movieDetail!.id));
+                                      } else {
+                                        servicesLocator<MovieDetailsBloc>().add(
+                                            AddFavoriteMoviesEvent(MovieModel(
+                                                id: state.movieDetail!.id,
+                                                title: state.movieDetail!.title,
+                                                backdropPath:
+                                                state.movieDetail!.backdropPath,
+                                                overview:
+                                                state.movieDetail!.overview,
+                                                releaseDate:
+                                                state.movieDetail!.releaseDate,
+                                                voteAverage:
+                                                state.movieDetail!.voteAverage,
+                                                genreIds: [])));
+                                      }
+                                    },
+                                    color: buttonColor,
+                                    icon: Icon(Icons.favorite),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 8.0),
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 2.0,
+                                      horizontal: 8.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[800],
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                    child: Text(
+                                      state.movieDetail!.releaseDate.split('-')[0],
+                                      style: const TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                        size: 20.0,
+                                      ),
+                                      const SizedBox(width: 4.0),
+                                      Text(
+                                        (state.movieDetail!.voteAverage / 2)
+                                            .toStringAsFixed(1),
+                                        style: const TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 1.2,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4.0),
+                                      Text(
+                                        '(${state.movieDetail!.voteAverage})',
+                                        style: const TextStyle(
+                                          fontSize: 1.0,
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 1.2,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Text(
+                                    _showDuration(state.movieDetail!.runtime),
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: 1.2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20.0),
+                              Text(
+                                state.movieDetail!.overview,
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                'Genres: ${_showGenres(state.movieDetail!.genres)}',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
+                      sliver: SliverToBoxAdapter(
+                        child: FadeInUp(
+                          from: 20,
+                          duration: const Duration(milliseconds: 500),
+                          child: const Text(
+                            "More like this",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    recommendation.length != 0
+                        ? SliverPadding(
+                      padding:
+                      const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
+                      sliver: _showRecommendations(recommendation),
+                    )
+                        : SizedBox(),
+                  ],
+                ),
+              );
+            }
+
+        )
     );
   }
 }
@@ -46,7 +258,7 @@ class MovieDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<MovieDetailsBloc, MovieDetailsState>(
+    return BlocConsumer<MovieDetailsCubit, MovieDetailsStates>(
       listener: (context, state) {
         print("BlocConsumer : listener ----------- ${state.isFavorite}");
         buttonColor = state.isFavorite ? Colors.red : Colors.grey;
@@ -99,7 +311,10 @@ class MovieDetailContent extends StatelessWidget {
                         },
                         blendMode: BlendMode.dstIn,
                         child: CachedNetworkImage(
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
                           imageUrl: ApiConstance.imageUrl(
                               state.movieDetail!.backdropPath),
                           fit: BoxFit.cover,
@@ -142,13 +357,13 @@ class MovieDetailContent extends StatelessWidget {
                                             id: state.movieDetail!.id,
                                             title: state.movieDetail!.title,
                                             backdropPath:
-                                                state.movieDetail!.backdropPath,
+                                            state.movieDetail!.backdropPath,
                                             overview:
-                                                state.movieDetail!.overview,
+                                            state.movieDetail!.overview,
                                             releaseDate:
-                                                state.movieDetail!.releaseDate,
+                                            state.movieDetail!.releaseDate,
                                             voteAverage:
-                                                state.movieDetail!.voteAverage,
+                                            state.movieDetail!.voteAverage,
                                             genreIds: [])));
                                   }
                                   // context.read<MovieDetailsBloc>().add(IsFavoriteMovieEvent(state.movieDetail!.id));
@@ -269,10 +484,10 @@ class MovieDetailContent extends StatelessWidget {
                 ),
                 recommendation.length != 0
                     ? SliverPadding(
-                        padding:
-                            const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
-                        sliver: _showRecommendations(recommendation),
-                      )
+                  padding:
+                  const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
+                  sliver: _showRecommendations(recommendation),
+                )
                     : SizedBox(),
               ],
             );
@@ -310,15 +525,16 @@ class MovieDetailContent extends StatelessWidget {
   Widget _showRecommendations(List<Recommendation> recommendation) {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
+            (context, index) {
           return InkWell(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => MovieDetailScreen(
-                    id: recommendation[index].id,
-                  ),
+                  builder: (BuildContext context) =>
+                      MovieDetailScreen(
+                        id: recommendation[index].id,
+                      ),
                 ),
               );
             },
@@ -330,20 +546,21 @@ class MovieDetailContent extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: ApiConstance.imageUrl(
                         recommendation[index].backdropPath!),
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey[850]!,
-                      highlightColor: Colors.grey[800]!,
-                      child: Container(
-                        height: 170.0,
-                        width: 120.0,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(8.0),
+                    placeholder: (context, url) =>
+                        Shimmer.fromColors(
+                          baseColor: Colors.grey[850]!,
+                          highlightColor: Colors.grey[800]!,
+                          child: Container(
+                            height: 170.0,
+                            width: 120.0,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
                     errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                    const Icon(Icons.error),
                     height: 180.0,
                     fit: BoxFit.cover,
                   )),
