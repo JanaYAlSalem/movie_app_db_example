@@ -21,7 +21,10 @@ class MoviesScreen extends StatelessWidget {
         ..add(GetPopularMoviesEvent())
         ..add(GetTopRatedMoviesEvent())
         ..add(GetFavoriteMoviesEvent()),
-      child: BlocBuilder<MoviesBloc, MoviesState>(
+      child: BlocConsumer<MoviesBloc, MoviesState>(
+        listener: (context, state) {
+          print("BlocConsumer : listener -----------${state.favoriteMovies.length}");
+        },
         builder: (context, state) {
           return Scaffold(
             body: SingleChildScrollView(

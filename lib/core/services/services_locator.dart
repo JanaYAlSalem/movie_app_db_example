@@ -22,10 +22,7 @@ class ServicesLocator {
     /// Bloc
     servicesLocator.registerFactory(() => MoviesBloc(servicesLocator(),
         servicesLocator(), servicesLocator(), servicesLocator()));
-    servicesLocator.registerFactory(() => MovieDetailsBloc(servicesLocator(),
-        servicesLocator(), servicesLocator(),servicesLocator()
-        ,servicesLocator()
-    ));
+    servicesLocator.registerFactory(() => MovieDetailsBloc());
 
     /// Remote Use Cases
     servicesLocator.registerLazySingleton(

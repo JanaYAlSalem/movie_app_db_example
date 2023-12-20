@@ -1,11 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app_db_example/core/network/api_constance.dart';
-import 'package:movie_app_db_example/core/services/services_locator.dart';
 import 'package:movie_app_db_example/core/utils/enums.dart';
 import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/domain/entities/genres.dart';
@@ -21,11 +19,12 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MovieDetailsBloc>(
+    return BlocProvider(
+      // create: (context) => servicesLocator<MovieDetailsBloc>()
       // create: (context) => context.read<MovieDetailsBloc>()
       // create: (context) => MovieDetailsBloc.get(context)
-      create: (context) => servicesLocator<MovieDetailsBloc>()
-        // create: (context) => BlocProvider.of<MovieDetailsBloc>(context)
+      // create: (context) => BlocProvider.of<MovieDetailsBloc>(context)
+        create: (context) => MovieDetailsBloc()
         ..add(GetMovieDetailsEvent(id))
         ..add(GetMovieRecommendationEvent(id))
         ..add(IsFavoriteMovieEvent(id)),
@@ -63,18 +62,18 @@ class MovieDetailContent extends StatelessWidget {
               slivers: [
                 SliverAppBar(
                   pinned: true,
-                  // automaticallyImplyLeading :false,
                   leading: IconButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => MoviesScreen(),
+                            builder: (BuildContext context) => const MoviesScreen(),
                           ));
+                      // Navigator.pop(context);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.chevron_left,
-                      color: Colors.white,
+                      color: Colors.grey,
                     ),
                   ),
                   expandedHeight: 250.0,
@@ -133,11 +132,11 @@ class MovieDetailContent extends StatelessWidget {
                               IconButton(
                                 onPressed: () async {
                                   if (state.isFavorite) {
-                                    servicesLocator<MovieDetailsBloc>().add(
+                                    BlocProvider.of<MovieDetailsBloc>(context).add(
                                         DeleteFavoriteMoviesEvent(
                                             state.movieDetail!.id));
                                   } else {
-                                    servicesLocator<MovieDetailsBloc>().add(
+                                    BlocProvider.of<MovieDetailsBloc>(context).add(
                                         AddFavoriteMoviesEvent(MovieModel(
                                             id: state.movieDetail!.id,
                                             title: state.movieDetail!.title,
