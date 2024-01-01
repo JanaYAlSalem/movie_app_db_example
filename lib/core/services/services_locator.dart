@@ -12,17 +12,22 @@ import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playi
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_top_rated_movies_usecase.dart';
-import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_bloc.dart';
-import 'package:movie_app_db_example/movies/presentation/movies/controller/movies_bloc.dart';
+import 'package:movie_app_db_example/movies/presentation/home_screen/cubit/app_movies_cubit.dart';
 
 final servicesLocator = GetIt.instance;
 
 class ServicesLocator {
   void init() {
     /// Bloc
-    servicesLocator.registerFactory(() => MoviesBloc(servicesLocator(),
-        servicesLocator(), servicesLocator(), servicesLocator()));
-    servicesLocator.registerFactory(() => MovieDetailsBloc());
+    // servicesLocator.registerFactory(() => MoviesBloc(servicesLocator(),
+    //     servicesLocator(), servicesLocator(), servicesLocator()));
+    // servicesLocator.registerFactory(() => MovieDetailsBloc());
+
+    // cubit
+    servicesLocator.registerFactory(() => AppMoviesCubit(
+        servicesLocator(),
+        servicesLocator(),servicesLocator(),servicesLocator()
+    ));
 
     /// Remote Use Cases
     servicesLocator.registerLazySingleton(

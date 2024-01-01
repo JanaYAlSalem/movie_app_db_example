@@ -121,9 +121,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
 
     result.fold(
       (l) => print("_isFavoriteMovie L,$l"),
-      (r) => emit(
-        state.copyWith(isFavorite: r),
-      ),
+      (r) => emit(state.copyWith(isFavorite: r),),
     );
   }
 }
