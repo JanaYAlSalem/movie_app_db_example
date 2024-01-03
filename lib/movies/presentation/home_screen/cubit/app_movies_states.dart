@@ -4,8 +4,8 @@ part of 'app_movies_cubit.dart';
 abstract class AppMoviesStates {}
 
 class AppMoviesInitialState extends AppMoviesStates {}
-
 class AppChangeBottomNabBarState extends AppMoviesStates {}
+class AppChangeModeState extends AppMoviesStates {}
 
 // data base states
 class AppCreateDatabaseState extends AppMoviesStates {}

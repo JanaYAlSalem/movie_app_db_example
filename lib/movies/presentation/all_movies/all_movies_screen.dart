@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:movie_app_db_example/core/network/api_constance.dart';
 import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/presentation/home_screen/cubit/app_movies_cubit.dart';
 import 'package:movie_app_db_example/movies/presentation/movie_details/screens/movie_detail_screen.dart';
@@ -93,8 +93,7 @@ class AllMoviesScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => MovieDetailScreen(
-                        listOfMovies[index]
+                    builder: (BuildContext context) => MovieDetailScreen(movie:listOfMovies[index]
                     ),
                   ),
                 );
@@ -119,7 +118,7 @@ class AllMoviesScreen extends StatelessWidget {
               CachedNetworkImage(
                 width: 120.0,
                 fit: BoxFit.cover,
-                imageUrl:     "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/iLuui1ZNcmZJBeDprCnJPXGFn24.jpg",
+                imageUrl:ApiConstance.imageUrl(movie.backdropPath),
                 placeholder: (context, url) =>
                     Shimmer.fromColors(
                       baseColor: Colors.grey[850]!,

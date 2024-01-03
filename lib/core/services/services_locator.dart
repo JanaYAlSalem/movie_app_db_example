@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:movie_app_db_example/movies/data/datasource/movie_local_data_source.dart';
-import 'package:movie_app_db_example/movies/data/datasource/movie_remote_data_source.dart';
+import 'package:movie_app_db_example/movies/data/datasource/local/database/movie_local_data_source.dart';
+import 'package:movie_app_db_example/movies/data/datasource/local/shared_preference/shared_preference_manager.dart';
+import 'package:movie_app_db_example/movies/data/datasource/remote/movie_remote_data_source.dart';
 import 'package:movie_app_db_example/movies/data/repository/movies_repository.dart';
 import 'package:movie_app_db_example/movies/domain/repository/base_movies_repository.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/local/add_favorite_movies_use_case.dart';
@@ -26,7 +27,7 @@ class ServicesLocator {
     // cubit
     servicesLocator.registerFactory(() => AppMoviesCubit(
         servicesLocator(),
-        servicesLocator(),servicesLocator(),servicesLocator()
+        servicesLocator(),servicesLocator(),servicesLocator(),servicesLocator()
     ));
 
     /// Remote Use Cases
@@ -54,6 +55,7 @@ class ServicesLocator {
     /// DATA SOURCE
     servicesLocator.registerLazySingleton<BaseMovieRemoteDataSource>(() => MovieRemoteDataSource());
     servicesLocator.registerFactory<BaseMovieLocalDataSource>(() => MovieLocalDataSource());
+    servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager());
 
   }
 }

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:movie_app_db_example/core/error/exceptions.dart';
 import 'package:movie_app_db_example/core/error/failure.dart';
-import 'package:movie_app_db_example/movies/data/datasource/movie_local_data_source.dart';
-import 'package:movie_app_db_example/movies/data/datasource/movie_remote_data_source.dart';
+import 'package:movie_app_db_example/movies/data/datasource/local/database/movie_local_data_source.dart';
+import 'package:movie_app_db_example/movies/data/datasource/remote/movie_remote_data_source.dart';
 import 'package:movie_app_db_example/movies/data/models/movie_model.dart';
 import 'package:movie_app_db_example/movies/data/models/movies_model_db.dart';
 import 'package:movie_app_db_example/movies/domain/entities/movie.dart';

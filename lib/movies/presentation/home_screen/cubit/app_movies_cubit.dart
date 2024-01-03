@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:movie_app_db_example/core/usecase/base_usecase.dart';
+import 'package:movie_app_db_example/movies/data/datasource/local/shared_preference/shared_preference_manager.dart';
 import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/domain/entities/recommendation.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playing_movies_usecase.dart';
@@ -12,6 +13,7 @@ import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_m
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_top_rated_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/presentation/all_movies/all_movies_screen.dart';
+import 'package:movie_app_db_example/movies/presentation/app_settings/settings_screen.dart';
 import 'package:movie_app_db_example/movies/presentation/favorite_movies/favorite_movies_screen.dart';
 
 part 'app_movies_states.dart';
@@ -21,21 +23,26 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
   final GetPopularMoviesUseCase getPopularMoviesUseCase;
   final GetTopRatedMoviesUseCase getTopRatedMoviesUseCase;
   final GetRecommendationUseCase getRecommendationUseCase;
+  final SharedPreferenceManager sharedPreferenceManager;
 
-  AppMoviesCubit(this.getNowPlayingMoviesUseCase, this.getPopularMoviesUseCase,
-      this.getTopRatedMoviesUseCase, this.getRecommendationUseCase)
+  AppMoviesCubit(
+      this.getNowPlayingMoviesUseCase,
+      this.getPopularMoviesUseCase,
+      this.getTopRatedMoviesUseCase,
+      this.getRecommendationUseCase,
+      this.sharedPreferenceManager)
       : super(AppMoviesInitialState());
 
   static AppMoviesCubit get(context) => BlocProvider.of(context);
 
   int bottomNavigationBarIndex = 0;
-
   List<Movie> nowPlayingMoviesList = [];
   List<Movie> popularMoviesMoviesList = [];
   List<Movie> topRatedMoviesList = [];
   List<Recommendation> recommendationMoviesList = [];
+  bool isDark = false;
 
-  List<Widget> appScreens = [AllMoviesScreen(), FavoriteMoviesScreen()];
+  List<Widget> appScreens = [const AllMoviesScreen(), FavoriteMoviesScreen(),const SettingsScreen()];
 
   void changeIndex(int index) {
     bottomNavigationBarIndex = index;
@@ -79,5 +86,16 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
       recommendationMoviesList = r;
       emit(GetRecommendationMoviesSuccessState());
     });
+  }
+
+  void changeAppMode() {
+    isDark = !isDark;
+    sharedPreferenceManager
+        .setMode(isDark)
+        .then((value) => emit(AppChangeModeState()));
+  }
+
+  void getMode () {
+    isDark = sharedPreferenceManager.getMode() as bool;
   }
 }

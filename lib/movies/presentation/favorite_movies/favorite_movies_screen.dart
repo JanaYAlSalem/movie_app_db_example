@@ -53,6 +53,7 @@ class FavoriteMoviesScreen extends StatelessWidget {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(4.0)),
                               child: CachedNetworkImage(
+                                // TODO : ApiConstance.imageUrl(movie.backdropPath),
                                 imageUrl: listIm[index],
                                 placeholder: (context, url) =>
                                     Shimmer.fromColors(
