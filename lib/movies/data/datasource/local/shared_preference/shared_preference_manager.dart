@@ -25,9 +25,8 @@ class SharedPreferenceManager {
     await SharedPreferencesUtils.setBool(SharedPreferenceKeys.mode, data: value);
   }
 
-  Future<bool?> getMode() async {
-
-    return await SharedPreferencesUtils.getBool(SharedPreferenceKeys.mode);
+  Future<bool> getMode() async {
+    return await SharedPreferencesUtils.getBool(SharedPreferenceKeys.mode) ?? false;
   }
 
 

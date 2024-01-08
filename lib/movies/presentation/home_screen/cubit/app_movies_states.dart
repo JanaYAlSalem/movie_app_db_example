@@ -7,11 +7,7 @@ class AppMoviesInitialState extends AppMoviesStates {}
 class AppChangeBottomNabBarState extends AppMoviesStates {}
 class AppChangeModeState extends AppMoviesStates {}
 
-// data base states
-class AppCreateDatabaseState extends AppMoviesStates {}
-class AppGetDatabaseState extends AppMoviesStates {}
-class AppInsertDatabaseState extends AppMoviesStates {}
-class AppDeleteDatabaseState extends AppMoviesStates {}
+
 
 // api's states
 

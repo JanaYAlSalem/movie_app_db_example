@@ -12,7 +12,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => servicesLocator<AppMoviesCubit>()..getNowPlayingMovies()..getPopularMovies()..getTopRatedMovies(),
+      create: (context) => servicesLocator<AppMoviesCubit>()
+        ..getNowPlayingMovies()
+        ..getPopularMovies()
+        ..getTopRatedMovies()
+        ..getMode(),
       // create: (context) => AppMoviesCubit()..getNowPlayingMovies,
       child: BlocConsumer<AppMoviesCubit, AppMoviesStates>(
         listener: (context, state) {
@@ -33,7 +37,8 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            body: AppMoviesCubit.get(context).appScreens[AppMoviesCubit.get(context).bottomNavigationBarIndex],
+            body: AppMoviesCubit.get(context).appScreens[
+                AppMoviesCubit.get(context).bottomNavigationBarIndex],
             bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 currentIndex:

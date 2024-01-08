@@ -1,62 +1,44 @@
-part of 'movie_details_bloc.dart';
+import 'package:flutter/cupertino.dart';
 
-class MovieDetailsState extends Equatable {
-  const MovieDetailsState(
-      {this.movieDetail,
-      this.movieDetailsState = RequestState.loading,
-      this.movieDetailsMessage = '',
-      this.recommendation = const [],
-      this.recommendationState = RequestState.loading,
-      this.recommendationMessage = '',
-      this.isFavorite = false,
-        this.favoriteMessage = ""
-      });
+@immutable
+abstract class MovieDetailsStates {}
 
-  final MovieDetail? movieDetail;
-  final RequestState movieDetailsState;
-  final String movieDetailsMessage;
+class MovieDetailsInitialState extends MovieDetailsStates {}
 
-  final List<Recommendation> recommendation;
-  final RequestState recommendationState;
-  final String recommendationMessage;
+// data base states
+class AppCreateDatabaseState extends MovieDetailsStates {}
 
-  final bool isFavorite;
-  final String favoriteMessage;
+class GetDatabaseLoadingState extends MovieDetailsStates {}
+class GetDatabaseSuccessState extends MovieDetailsStates {}
+class GetDatabaseErrorState extends MovieDetailsStates {
+  final String error;
+  GetDatabaseErrorState(this.error);
+}
 
-  MovieDetailsState copyWith(
-      {MovieDetail? movieDetail,
-      RequestState? movieDetailsState,
-      String? movieDetailsMessage,
-      List<Recommendation>? recommendation,
-      RequestState? recommendationState,
-      String? recommendationMessage,
-      bool? isFavorite,
-      String? favoriteMessage}) {
-    return MovieDetailsState(
-        movieDetail: movieDetail ?? this.movieDetail,
-        movieDetailsState: movieDetailsState ?? this.movieDetailsState,
-        movieDetailsMessage: movieDetailsMessage ?? this.movieDetailsMessage,
-        recommendation: recommendation ?? this.recommendation,
-        recommendationState: recommendationState ?? this.recommendationState,
-        recommendationMessage:
-            recommendationMessage ?? this.recommendationMessage,
-        isFavorite: isFavorite ?? this.isFavorite,
-        favoriteMessage : favoriteMessage ?? this.favoriteMessage
-    );
-  }
+class InsertMovieToDatabaseLoadingState extends MovieDetailsStates {}
+class InsertMovieToDatabaseSuccessState extends MovieDetailsStates {}
+class InsertMovieToDatabaseErrorState extends MovieDetailsStates {
+  final String error;
+  InsertMovieToDatabaseErrorState(this.error);
+}
 
-  @override
-  List<Object?> get props => [
-        movieDetail,
-        movieDetailsState,
-        movieDetailsMessage,
+class DeleteMovieToDatabaseLoadingState extends MovieDetailsStates {}
+class DeleteMovieToDatabaseSuccessState extends MovieDetailsStates {}
+class DeleteMovieToDatabaseErrorState extends MovieDetailsStates {
+  final String error;
+  DeleteMovieToDatabaseErrorState(this.error);
+}
 
-        recommendation,
-        recommendationState,
-        recommendationMessage,
+class IsFavoriteMovieLoadingState extends MovieDetailsStates {}
+class IsFavoriteMovieSuccessState extends MovieDetailsStates {}
+class IsFavoriteMovieErrorState extends MovieDetailsStates {
+  final String error;
+  IsFavoriteMovieErrorState(this.error);
+}
 
-        isFavorite,
-        favoriteMessage
-
-      ];
+class GetFavoriteMoviesLoadingState extends MovieDetailsStates {}
+class GetFavoriteMoviesSuccessState extends MovieDetailsStates {}
+class GetFavoriteMoviesErrorState extends MovieDetailsStates {
+  final String error;
+  GetFavoriteMoviesErrorState(this.error);
 }

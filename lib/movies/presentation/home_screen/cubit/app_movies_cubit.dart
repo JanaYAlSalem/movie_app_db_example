@@ -8,6 +8,7 @@ import 'package:movie_app_db_example/core/usecase/base_usecase.dart';
 import 'package:movie_app_db_example/movies/data/datasource/local/shared_preference/shared_preference_manager.dart';
 import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/domain/entities/recommendation.dart';
+import 'package:movie_app_db_example/movies/domain/usecases/local/add_favorite_movies_use_case.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playing_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
@@ -24,6 +25,7 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
   final GetTopRatedMoviesUseCase getTopRatedMoviesUseCase;
   final GetRecommendationUseCase getRecommendationUseCase;
   final SharedPreferenceManager sharedPreferenceManager;
+
 
   AppMoviesCubit(
       this.getNowPlayingMoviesUseCase,
@@ -56,7 +58,6 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
     result.fold((l) => emit(GetNowPlayingMoviesErrorState(l.message)), (r) {
       nowPlayingMoviesList = r;
       print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ${r}");
-
       emit(GetNowPlayingMoviesSuccessState());
     });
   }
@@ -84,6 +85,7 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
     final result = await getRecommendationUseCase(RecommendationParameters(id));
     result.fold((l) => emit(GetRecommendationMoviesErrorState(l.message)), (r) {
       recommendationMoviesList = r;
+      print("getRecommendationMovies ${r}");
       emit(GetRecommendationMoviesSuccessState());
     });
   }
@@ -95,7 +97,10 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
         .then((value) => emit(AppChangeModeState()));
   }
 
-  void getMode () {
-    isDark = sharedPreferenceManager.getMode() as bool;
+  Future<bool> getMode() async {
+    isDark = await sharedPreferenceManager.getMode();
+    return isDark;
   }
+
+
 }

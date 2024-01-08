@@ -14,6 +14,7 @@ import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_m
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_top_rated_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/presentation/home_screen/cubit/app_movies_cubit.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_cubit.dart';
 
 final servicesLocator = GetIt.instance;
 
@@ -28,6 +29,13 @@ class ServicesLocator {
     servicesLocator.registerFactory(() => AppMoviesCubit(
         servicesLocator(),
         servicesLocator(),servicesLocator(),servicesLocator(),servicesLocator()
+    ));
+
+    //MovieDetailsCubit
+    servicesLocator.registerFactory(() => MovieDetailsCubit(
+        servicesLocator(),
+        servicesLocator(),
+        servicesLocator()
     ));
 
     /// Remote Use Cases
@@ -56,6 +64,9 @@ class ServicesLocator {
     servicesLocator.registerLazySingleton<BaseMovieRemoteDataSource>(() => MovieRemoteDataSource());
     servicesLocator.registerFactory<BaseMovieLocalDataSource>(() => MovieLocalDataSource());
     servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager());
+
+    // SharedPreference
+    // servicesLocator.registerLazySingleton<SharedPreferenceManager>(() => SharedPreferenceManager());
 
   }
 }

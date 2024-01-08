@@ -43,7 +43,7 @@ class AllMoviesScreen extends StatelessWidget {
                       Text(
                         "Popular",
                         style: Theme.of(context).textTheme.bodyText1,
-                ),
+                      ),
                     ],
                   ),
                 ),
@@ -87,58 +87,53 @@ class AllMoviesScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           itemCount: listOfMovies.length,
           itemBuilder: (context, index) {
-            return _buildItemCardWidget(
-              listOfMovies[index],
-              () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => MovieDetailScreen(movie:listOfMovies[index]
-                    ),
-                  ),
-                );
-              },
-              context
-            );
+            return _buildItemCardWidget(listOfMovies[index], () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      MovieDetailScreen(movie: listOfMovies[index]),
+                ),
+              );
+            }, context);
           },
         ),
       ),
     );
   }
 
-  Widget _buildItemCardWidget(Movie movie, Function()? onTap, BuildContext context) {
+  Widget _buildItemCardWidget(
+      Movie movie, Function()? onTap, BuildContext context) {
     return Container(
+      width: 120.0,
       padding: const EdgeInsets.only(right: 8.0),
       child: InkWell(
-        onTap: onTap,
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          child: Column(
-            children: [
-              CachedNetworkImage(
-                width: 120.0,
-                fit: BoxFit.cover,
-                imageUrl:ApiConstance.imageUrl(movie.backdropPath),
-                placeholder: (context, url) =>
-                    Shimmer.fromColors(
-                      baseColor: Colors.grey[850]!,
-                      highlightColor: Colors.grey[800]!,
-                      child: Container(
-                        height: 170.0,
-                        width: 120.0,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
+          onTap: onTap,
+          child: FadeInUp(
+            from: 20,
+            duration: const Duration(milliseconds: 500),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+              child: CachedNetworkImage(
+                imageUrl: ApiConstance.imageUrl(movie.backdropPath),
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey[850]!,
+                  highlightColor: Colors.grey[800]!,
+                  child: Container(
+                    height: 170.0,
+                    width: 120.0,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
+                  ),
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
+                height: 180.0,
+                fit: BoxFit.cover,
               ),
-              // Text(movie.title, style: Theme.of(context).textTheme.bodyText1,)
-            ],
-          ),
-        ),
-      ),
+            ),
+          )),
     );
   }
 }

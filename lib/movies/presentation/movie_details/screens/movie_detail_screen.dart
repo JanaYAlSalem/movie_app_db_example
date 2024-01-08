@@ -10,6 +10,7 @@ import 'package:movie_app_db_example/movies/domain/entities/genres.dart';
 import 'package:movie_app_db_example/movies/domain/entities/movie.dart';
 import 'package:movie_app_db_example/movies/domain/entities/recommendation.dart';
 import 'package:movie_app_db_example/movies/presentation/home_screen/cubit/app_movies_cubit.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MovieDetailScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class MovieDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => servicesLocator<AppMoviesCubit>(),
+        create: (context) => servicesLocator<MovieDetailsCubit>(),
         lazy: false,
         child: Scaffold(
             appBar: AppBar(
@@ -88,13 +89,12 @@ class MovieDetailScreen extends StatelessWidget {
                                             letterSpacing: 1.2,
                                           )),
                                     ),
-                                    Spacer(),
                                     IconButton(
                                       onPressed: () {
-
+                                        MovieDetailsCubit.get(context).addFavoriteMovies(movie);
                                       },
-                                      color: AppColors.gray30,
-                                      icon: Icon(Icons.favorite),
+                                      color: AppColors.gray20,
+                                      icon: const Icon(Icons.favorite),
                                     )
                                   ],
                                 ),
@@ -107,7 +107,6 @@ class MovieDetailScreen extends StatelessWidget {
                                         horizontal: 8.0,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: Colors.grey[800],
                                         borderRadius: BorderRadius.circular(
                                             4.0),
                                       ),
@@ -149,16 +148,6 @@ class MovieDetailScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(width: 16.0),
-                                    // Text(
-                                    //   _showDuration(movie.runtime),
-                                    //   style: const TextStyle(
-                                    //     color: Colors.white70,
-                                    //     fontSize: 16.0,
-                                    //     fontWeight: FontWeight.w500,
-                                    //     letterSpacing: 1.2,
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                                 const SizedBox(height: 20.0),
@@ -204,13 +193,16 @@ class MovieDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      // if(GetRecommendationMoviesSuccessState())
+                      state == GetRecommendationMoviesSuccessState() ?
                       // AppMoviesCubit.get(context).recommendationMoviesList.isNotEmpty
-                      //     ? SliverPadding(
-                      //   padding:
-                      //   const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
-                      //   sliver: _showRecommendations(AppMoviesCubit.get(context).recommendationMoviesList),
-                      // )
-                      //     : SizedBox(),
+                      //     ?
+                      SliverPadding(
+                        padding:
+                        const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
+                        sliver: _showRecommendations(AppMoviesCubit.get(context).recommendationMoviesList),
+                      )
+                          : SizedBox(),
                     ],
                   );
                 }

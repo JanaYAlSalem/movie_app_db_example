@@ -50,8 +50,7 @@ class FavoriteMoviesScreen extends StatelessWidget {
                           from: 20,
                           duration: const Duration(milliseconds: 500),
                           child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(4.0)),
+                              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                               child: CachedNetworkImage(
                                 // TODO : ApiConstance.imageUrl(movie.backdropPath),
                                 imageUrl: listIm[index],
