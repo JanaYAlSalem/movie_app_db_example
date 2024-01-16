@@ -11,52 +11,41 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => servicesLocator<AppMoviesCubit>()
-        ..getNowPlayingMovies()
-        ..getPopularMovies()
-        ..getTopRatedMovies()
-        ..getMode(),
-      // create: (context) => AppMoviesCubit()..getNowPlayingMovies,
-      child: BlocConsumer<AppMoviesCubit, AppMoviesStates>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/logo.svg',
-                    semanticsLabel: 'My SVG Image',
-                    height: 20,
-                    width: 20,
-                    color: AppColors.green30,
-                  ),
-                ],
-              ),
+    return BlocBuilder<AppMoviesCubit, AppMoviesStates>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/images/logo.svg',
+                  semanticsLabel: 'My SVG Image',
+                  height: 20,
+                  width: 20,
+                  color: AppColors.green30,
+                ),
+              ],
             ),
-            body: AppMoviesCubit.get(context).appScreens[
-                AppMoviesCubit.get(context).bottomNavigationBarIndex],
-            bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                currentIndex:
-                    AppMoviesCubit.get(context).bottomNavigationBarIndex,
-                onTap: (index) {
-                  AppMoviesCubit.get(context).changeIndex(index);
-                },
-                items: const [
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.home), label: "Home"),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.favorite), label: "Favorite"),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.settings), label: "Settings"),
-                ]),
-          );
-        },
-      ),
+          ),
+          body: AppMoviesCubit.get(context).appScreens[
+          AppMoviesCubit.get(context).bottomNavigationBarIndex],
+          bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex:
+              AppMoviesCubit.get(context).bottomNavigationBarIndex,
+              onTap: (index) {
+                AppMoviesCubit.get(context).changeIndex(index);
+              },
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home), label: "Home"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.favorite), label: "Favorite"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.settings), label: "Settings"),
+              ]),
+        );
+      },
     );
   }
 }
