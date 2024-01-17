@@ -7,6 +7,7 @@ import 'package:movie_app_db_example/core/utils/theme/light_theme.dart';
 import 'package:movie_app_db_example/movies/presentation/home_screen/cubit/app_movies_cubit.dart';
 import 'package:movie_app_db_example/movies/presentation/home_screen/home_screen.dart';
 import 'package:movie_app_db_example/core/services/services_locator.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +21,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => servicesLocator<AppMoviesCubit>()
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider( create: (context) => servicesLocator<AppMoviesCubit>()
           ..getNowPlayingMovies()
           ..getPopularMovies()
           ..getTopRatedMovies()
-          ..getMode(),
+          ..getMode()),
+        BlocProvider( create: (context) => servicesLocator<MovieDetailsCubit>()),
+      ],
+
         child: BlocBuilder<AppMoviesCubit, AppMoviesStates>(
             builder: (context, state) {
         return MaterialApp(
