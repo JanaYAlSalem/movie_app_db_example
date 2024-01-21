@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_db_example/core/utils/bloc_observer.dart';
 import 'package:movie_app_db_example/core/utils/theme/dark_theme.dart';
 import 'package:movie_app_db_example/core/utils/theme/light_theme.dart';
+import 'package:movie_app_db_example/movies/presentation/favorite_movies/cubit/favorite_movies_cubit.dart';
 import 'package:movie_app_db_example/movies/presentation/home_screen/cubit/app_movies_cubit.dart';
-import 'package:movie_app_db_example/movies/presentation/home_screen/home_screen.dart';
+import 'package:movie_app_db_example/movies/presentation/home_screen/screens/home_screen.dart';
 import 'package:movie_app_db_example/core/services/services_locator.dart';
-import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_cubit.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/cubit/movie_details_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +29,12 @@ class MyApp extends StatelessWidget {
           ..getPopularMovies()
           ..getTopRatedMovies()
           ..getMode()),
-        BlocProvider( create: (context) => servicesLocator<MovieDetailsCubit>()),
+        BlocProvider( create: (context) => servicesLocator<MovieDetailsCubit>()
+          // ..isFavoriteMovie(id)
+        ),
+        BlocProvider( create: (context) => servicesLocator<FavoriteMoviesCubit>()
+          ..getFavoriteMovies()
+        ),
       ],
 
         child: BlocBuilder<AppMoviesCubit, AppMoviesStates>(

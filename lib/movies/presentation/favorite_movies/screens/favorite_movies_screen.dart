@@ -3,18 +3,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:movie_app_db_example/core/network/api_constance.dart';
+import 'package:movie_app_db_example/movies/presentation/favorite_movies/cubit/favorite_movies_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 
 
 
 class FavoriteMoviesScreen extends StatelessWidget {
   FavoriteMoviesScreen({super.key});
-
-  final listIm = [
-    "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/iLuui1ZNcmZJBeDprCnJPXGFn24.jpg",
-    "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/iLuui1ZNcmZJBeDprCnJPXGFn24.jpg",
-    "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/iLuui1ZNcmZJBeDprCnJPXGFn24.jpg",
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +34,7 @@ class FavoriteMoviesScreen extends StatelessWidget {
             ),
           ),
         ),
-        listIm.isNotEmpty
+        FavoriteMoviesCubit.get(context).favoriteMoviesList.isNotEmpty
             ? SliverPadding(
                 padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
                 sliver: SliverGrid(
@@ -52,8 +48,7 @@ class FavoriteMoviesScreen extends StatelessWidget {
                           child: ClipRRect(
                               borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                               child: CachedNetworkImage(
-                                // TODO : ApiConstance.imageUrl(movie.backdropPath),
-                                imageUrl: listIm[index],
+                                imageUrl: ApiConstance.imageUrl(FavoriteMoviesCubit.get(context).favoriteMoviesList[index].backdropPath),
                                 placeholder: (context, url) =>
                                     Shimmer.fromColors(
                                   baseColor: Colors.grey[850]!,

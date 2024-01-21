@@ -13,9 +13,9 @@ import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playi
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_top_rated_movies_usecase.dart';
-import 'package:movie_app_db_example/movies/presentation/all_movies/all_movies_screen.dart';
-import 'package:movie_app_db_example/movies/presentation/app_settings/settings_screen.dart';
-import 'package:movie_app_db_example/movies/presentation/favorite_movies/favorite_movies_screen.dart';
+import 'package:movie_app_db_example/movies/presentation/all_movies/screens/all_movies_screen.dart';
+import 'package:movie_app_db_example/movies/presentation/app_settings/screens/settings_screen.dart';
+import 'package:movie_app_db_example/movies/presentation/favorite_movies/screens/favorite_movies_screen.dart';
 
 part 'app_movies_states.dart';
 

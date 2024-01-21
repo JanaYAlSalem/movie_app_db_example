@@ -13,8 +13,9 @@ import 'package:movie_app_db_example/movies/domain/usecases/remote/get_now_playi
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_popular_movies_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_recommendation_usecase.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/remote/get_top_rated_movies_usecase.dart';
+import 'package:movie_app_db_example/movies/presentation/favorite_movies/cubit/favorite_movies_cubit.dart';
 import 'package:movie_app_db_example/movies/presentation/home_screen/cubit/app_movies_cubit.dart';
-import 'package:movie_app_db_example/movies/presentation/movie_details/controller/movie_details_cubit.dart';
+import 'package:movie_app_db_example/movies/presentation/movie_details/cubit/movie_details_cubit.dart';
 
 final servicesLocator = GetIt.instance;
 
@@ -25,7 +26,7 @@ class ServicesLocator {
     //     servicesLocator(), servicesLocator(), servicesLocator()));
     // servicesLocator.registerFactory(() => MovieDetailsBloc());
 
-    // cubit
+    // AppMoviesCubit
     servicesLocator.registerFactory(() => AppMoviesCubit(
         servicesLocator(),
         servicesLocator(),servicesLocator(),servicesLocator(),servicesLocator()
@@ -35,6 +36,11 @@ class ServicesLocator {
     servicesLocator.registerFactory(() => MovieDetailsCubit(
         servicesLocator(),
         servicesLocator(),
+        servicesLocator()
+    ));
+
+    //  FavoriteMoviesCubit
+    servicesLocator.registerFactory(() => FavoriteMoviesCubit(
         servicesLocator()
     ));
 

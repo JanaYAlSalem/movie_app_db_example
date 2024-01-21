@@ -36,9 +36,4 @@ class IsFavoriteMovieErrorState extends MovieDetailsStates {
   IsFavoriteMovieErrorState(this.error);
 }
 
-class GetFavoriteMoviesLoadingState extends MovieDetailsStates {}
-class GetFavoriteMoviesSuccessState extends MovieDetailsStates {}
-class GetFavoriteMoviesErrorState extends MovieDetailsStates {
-  final String error;
-  GetFavoriteMoviesErrorState(this.error);
-}
+
