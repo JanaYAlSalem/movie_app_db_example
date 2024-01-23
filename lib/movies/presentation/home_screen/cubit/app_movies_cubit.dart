@@ -23,7 +23,6 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
   final GetNowPlayingMoviesUseCase getNowPlayingMoviesUseCase;
   final GetPopularMoviesUseCase getPopularMoviesUseCase;
   final GetTopRatedMoviesUseCase getTopRatedMoviesUseCase;
-  final GetRecommendationUseCase getRecommendationUseCase;
   final SharedPreferenceManager sharedPreferenceManager;
 
 
@@ -31,7 +30,6 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
       this.getNowPlayingMoviesUseCase,
       this.getPopularMoviesUseCase,
       this.getTopRatedMoviesUseCase,
-      this.getRecommendationUseCase,
       this.sharedPreferenceManager)
       : super(AppMoviesInitialState());
 
@@ -41,7 +39,6 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
   List<Movie> nowPlayingMoviesList = [];
   List<Movie> popularMoviesMoviesList = [];
   List<Movie> topRatedMoviesList = [];
-  List<Recommendation> recommendationMoviesList = [];
   bool isDark = false;
 
   List<Widget> appScreens = [const AllMoviesScreen(), FavoriteMoviesScreen(),const SettingsScreen()];
@@ -77,16 +74,6 @@ class AppMoviesCubit extends Cubit<AppMoviesStates> {
     result.fold((l) => emit(GetTopRatedMoviesErrorState(l.message)), (r) {
       topRatedMoviesList = r;
       emit(GetTopRatedMoviesSuccessState());
-    });
-  }
-
-  FutureOr<void> getRecommendationMovies(int id) async {
-    emit(GetRecommendationMoviesLoadingState());
-    final result = await getRecommendationUseCase(RecommendationParameters(id));
-    result.fold((l) => emit(GetRecommendationMoviesErrorState(l.message)), (r) {
-      recommendationMoviesList = r;
-      print("getRecommendationMovies ${r}");
-      emit(GetRecommendationMoviesSuccessState());
     });
   }
 

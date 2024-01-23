@@ -35,11 +35,4 @@ class GetTopRatedMoviesErrorState extends AppMoviesStates {
   GetTopRatedMoviesErrorState(this.error);
 }
 
-// GetRecommendation
-class GetRecommendationMoviesLoadingState extends AppMoviesStates {}
-class GetRecommendationMoviesSuccessState extends AppMoviesStates {}
-class GetRecommendationMoviesErrorState extends AppMoviesStates {
-  final String error;
-  GetRecommendationMoviesErrorState(this.error);
-}
 

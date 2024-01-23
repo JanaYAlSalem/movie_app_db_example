@@ -15,18 +15,8 @@ abstract class BaseMovieLocalDataSource {
 }
 
 class MovieLocalDataSource extends BaseMovieLocalDataSource {
-  // late Isar isar;
   late Future<Isar> isarDB;
 
-  // openDB() async {
-  //   print("2------------ MovieLocalDataSource");
-  //   final Directory dir = await getApplicationSupportDirectory();
-  //   if (dir.existsSync()) {
-  //     isar = await Isar.open([MovieModelDBSchema], directory: dir.path);
-  //     print("isar : ${isar.path}");
-  //     return isar;
-  //   }
-  // }
   MovieLocalDataSource() {
     isarDB = openD();
   }
@@ -48,7 +38,10 @@ class MovieLocalDataSource extends BaseMovieLocalDataSource {
       ..idMovieModel = favoriteMovie.id
       ..title = favoriteMovie.title
       ..overview = favoriteMovie.overview
-      ..backdropPath = favoriteMovie.backdropPath;
+      ..backdropPath = favoriteMovie.backdropPath
+      ..releaseDate = favoriteMovie.releaseDate
+      ..genreIds = favoriteMovie.genreIds
+      ..voteAverage = favoriteMovie.voteAverage;
     final isar = await isarDB;
     try {
       await isar.writeTxnSync(() => isar.movieModelDBs.putSync(newMovie));

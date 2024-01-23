@@ -21,25 +21,15 @@ final servicesLocator = GetIt.instance;
 
 class ServicesLocator {
   void init() {
-    /// Bloc
-    // servicesLocator.registerFactory(() => MoviesBloc(servicesLocator(),
-    //     servicesLocator(), servicesLocator(), servicesLocator()));
-    // servicesLocator.registerFactory(() => MovieDetailsBloc());
-
     // AppMoviesCubit
-    servicesLocator.registerFactory(() => AppMoviesCubit(
-        servicesLocator(),
-        servicesLocator(),servicesLocator(),servicesLocator(),servicesLocator()
-    ));
+    servicesLocator.registerFactory(() => AppMoviesCubit(servicesLocator(),
+        servicesLocator(), servicesLocator(), servicesLocator()));
 
     //MovieDetailsCubit
-    servicesLocator.registerFactory(() => MovieDetailsCubit(
-        servicesLocator(),
-        servicesLocator(),
-        servicesLocator()
-    ));
+    servicesLocator.registerFactory(() => MovieDetailsCubit(servicesLocator(),
+        servicesLocator(), servicesLocator(), servicesLocator()));
 
-    //  FavoriteMoviesCubit
+     // FavoriteMoviesCubit
     servicesLocator.registerFactory(() => FavoriteMoviesCubit(
         servicesLocator()
     ));
@@ -57,22 +47,25 @@ class ServicesLocator {
         () => GetRecommendationUseCase(servicesLocator()));
 
     // Local Use Cases
-    servicesLocator.registerLazySingleton(() => GetFavoriteMoviesUseCase(servicesLocator()));
-    servicesLocator.registerLazySingleton(() => AddFavoriteMoviesUseCase(servicesLocator()));
-    servicesLocator.registerLazySingleton(() => DeleteFavoriteMoviesUseCase(servicesLocator()));
-    servicesLocator.registerLazySingleton(() => IsFavoriteMovieUseCase(servicesLocator()));
+    servicesLocator.registerLazySingleton(
+        () => GetFavoriteMoviesUseCase(servicesLocator()));
+    servicesLocator.registerLazySingleton(
+        () => AddFavoriteMoviesUseCase(servicesLocator()));
+    servicesLocator.registerLazySingleton(
+        () => DeleteFavoriteMoviesUseCase(servicesLocator()));
+    servicesLocator
+        .registerLazySingleton(() => IsFavoriteMovieUseCase(servicesLocator()));
 
     /// Repository
     servicesLocator.registerLazySingleton<BaseMoviesRepository>(
         () => MoviesRepository(servicesLocator(), servicesLocator()));
 
     /// DATA SOURCE
-    servicesLocator.registerLazySingleton<BaseMovieRemoteDataSource>(() => MovieRemoteDataSource());
-    servicesLocator.registerFactory<BaseMovieLocalDataSource>(() => MovieLocalDataSource());
-    servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager());
-
-    // SharedPreference
-    // servicesLocator.registerLazySingleton<SharedPreferenceManager>(() => SharedPreferenceManager());
-
+    servicesLocator.registerLazySingleton<BaseMovieRemoteDataSource>(
+        () => MovieRemoteDataSource());
+    servicesLocator.registerFactory<BaseMovieLocalDataSource>(
+        () => MovieLocalDataSource());
+    servicesLocator.registerFactory<SharedPreferenceManager>(
+        () => SharedPreferenceManager());
   }
 }

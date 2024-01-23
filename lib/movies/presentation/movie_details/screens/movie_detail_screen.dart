@@ -21,8 +21,9 @@ class MovieDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>  servicesLocator<MovieDetailsCubit>()
-        ..isFavoriteMovie(movie.id),
+      create: (context) => servicesLocator<MovieDetailsCubit>()
+        ..isFavoriteMovie(movie.id)
+        ..getRecommendationMovies(movie.id),
       child: Scaffold(
           appBar: AppBar(
             title: Text(movie.title),
@@ -161,86 +162,58 @@ class MovieDetailScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8.0),
-                        // Text(
-                        //   'Genres: ${_showGenres(
-                        //       state.movieDetail!.genres)}',
-                        //   style: const TextStyle(
-                        //     color: Colors.white70,
-                        //     fontSize: 12.0,
-                        //     fontWeight: FontWeight.w500,
-                        //     letterSpacing: 1.2,
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
                 ),
               ),
-              // SliverPadding(
-              //   padding: const EdgeInsets.fromLTRB(
-              //       16.0, 16.0, 16.0, 24.0),
-              //   sliver: SliverToBoxAdapter(
-              //     child: FadeInUp(
-              //       from: 20,
-              //       duration: const Duration(milliseconds: 500),
-              //       child: const Text(
-              //         "More like this",
-              //         style: TextStyle(
-              //           fontSize: 16.0,
-              //           fontWeight: FontWeight.w500,
-              //           letterSpacing: 1.2,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // // if(GetRecommendationMoviesSuccessState())
-              // state == GetRecommendationMoviesSuccessState() ?
-              // // AppMoviesCubit.get(context).recommendationMoviesList.isNotEmpty
-              // //     ?
-              // SliverPadding(
-              //   padding:
-              //   const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
-              //   sliver: _showRecommendations(AppMoviesCubit
-              //       .get(context)
-              //       .recommendationMoviesList),
-              // )
-              //     : const SizedBox(),
+              // todo : MovieDetailsCubit.get(context).recommendationMoviesList.isNotEmpty
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
+                sliver: SliverToBoxAdapter(
+                  child: FadeInUp(
+                    from: 20,
+                    duration: const Duration(milliseconds: 500),
+                    child: const Text(
+                      "More like this",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SliverGrid(
+                gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  childCount: MovieDetailsCubit.get(context).recommendationMoviesList.length,
+                      (BuildContext context, int index) {
+                        return Container(
+                      alignment: Alignment.center,
+                      color: Colors.teal[100 * (index % 9)],
+                      child: Text('grid item $index'),
+                    );
+                  },
+                ),)
             ],
           )),
     );
   }
 }
 
-String _showGenres(List<Genres> genres) {
-  String result = '';
-  for (var genre in genres) {
-    result += '${genre.name}, ';
-  }
-
-  if (result.isEmpty) {
-    return result;
-  }
-
-  return result.substring(0, result.length - 2);
-}
-
-String _showDuration(int runtime) {
-  final int hours = runtime ~/ 60;
-  final int minutes = runtime % 60;
-
-  if (hours > 0) {
-    return '${hours}h ${minutes}m';
-  } else {
-    return '${minutes}m';
-  }
-}
-
 Widget _showRecommendations(List<Recommendation> recommendation) {
-  return SliverGrid(
-    delegate: SliverChildBuilderDelegate(
-      (context, index) {
-        return InkWell(
+  return GridView.builder(
+    itemCount: recommendation.length,
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 3,
+    ),
+    padding: const EdgeInsets.all(16.0),
+    itemBuilder: (BuildContext context, int index) {
+      return InkWell(
           onTap: () {},
           child: FadeInUp(
             from: 20,
@@ -269,12 +242,5 @@ Widget _showRecommendations(List<Recommendation> recommendation) {
           ),
         );
       },
-    ),
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      mainAxisSpacing: 8.0,
-      crossAxisSpacing: 8.0,
-      childAspectRatio: 0.7,
-      crossAxisCount: 3,
-    ),
-  );
+    );
 }

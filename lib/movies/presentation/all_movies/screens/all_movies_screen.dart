@@ -95,7 +95,7 @@ class AllMoviesScreen extends StatelessWidget {
                       MovieDetailScreen(movie: listOfMovies[index]),
                 ),
               );
-            }, context);
+            });
           },
         ),
       ),
@@ -103,7 +103,7 @@ class AllMoviesScreen extends StatelessWidget {
   }
 
   Widget _buildItemCardWidget(
-      Movie movie, Function()? onTap, BuildContext context) {
+      Movie movie, Function()? onTap) {
     return Container(
       width: 120.0,
       padding: const EdgeInsets.only(right: 8.0),
