@@ -27,6 +27,15 @@ class MovieDetailScreen extends StatelessWidget {
       child: Scaffold(
           appBar: AppBar(
             title: Text(movie.title),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+               },
+              icon: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+              ),
+            ),
           ),
           body: CustomScrollView(
             slivers: [

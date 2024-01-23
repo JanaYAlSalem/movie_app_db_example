@@ -1,7 +1,10 @@
 part of 'app_movies_cubit.dart';
 
 @immutable
-abstract class AppMoviesStates {}
+abstract class AppMoviesStates extends Equatable {
+  @override
+  List<Object> get props => [identityHashCode(this)];
+}
 
 class AppMoviesInitialState extends AppMoviesStates {}
 class AppChangeBottomNabBarState extends AppMoviesStates {}
@@ -17,6 +20,12 @@ class GetNowPlayingMoviesSuccessState extends AppMoviesStates {}
 class GetNowPlayingMoviesErrorState extends AppMoviesStates {
   final String error;
   GetNowPlayingMoviesErrorState(this.error);
+
+  @override
+  List<Object> get props => [
+    error,
+    identityHashCode(this),
+  ];
 }
 
 // GetPopularMovies
@@ -25,6 +34,13 @@ class GetPopularMoviesSuccessState extends AppMoviesStates {}
 class GetPopularMoviesErrorState extends AppMoviesStates {
   final String error;
   GetPopularMoviesErrorState(this.error);
+
+  @override
+  List<Object> get props => [
+    error,
+    identityHashCode(this),
+  ];
+
 }
 
 // GetTopRatedMovies
@@ -33,6 +49,12 @@ class GetTopRatedMoviesSuccessState extends AppMoviesStates {}
 class GetTopRatedMoviesErrorState extends AppMoviesStates {
   final String error;
   GetTopRatedMoviesErrorState(this.error);
+
+  @override
+  List<Object> get props => [
+    error,
+    identityHashCode(this),
+  ];
 }
 
 
