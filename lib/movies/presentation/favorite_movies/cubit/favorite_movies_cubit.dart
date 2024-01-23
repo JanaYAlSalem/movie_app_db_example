@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:movie_app_db_example/core/usecase/base_usecase.dart';
 import 'package:movie_app_db_example/movies/data/models/movies_model_db.dart';
 import 'package:movie_app_db_example/movies/domain/usecases/local/get_favorite_movies_usecase.dart';
